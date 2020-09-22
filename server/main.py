@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, make_response, request, redirect, url_for
+from flask import redirect, url_for
+from app import create_app
+from config import Config
 
-
-app = Flask(__name__)
+app = create_app(Config)
 
 @app.route('/index', methods=['get', 'post'])
 def index():

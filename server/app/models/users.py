@@ -1,10 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:2304@localhost:5432/gpd-dev"
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
+from app import db
 
 class User(db.Model):
     __tablename__ = 'users'
