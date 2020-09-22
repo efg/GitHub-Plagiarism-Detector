@@ -33,6 +33,7 @@ venv*
 server/venv/
 server/dist/
 server/build/
+server/migrations/
 *.egg
 *.egg-info/
 _mailinglist
