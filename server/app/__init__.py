@@ -10,6 +10,6 @@ def create_app(Config=None):
     db.init_app(app)
     Migrate(app,db)
 
-    from app.models import users
+    from app.models import users, courses, submissions, checks
 
     return app
