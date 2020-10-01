@@ -8,6 +8,8 @@ class User(db.Model):
     name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False, index = True, unique=True)
     password = db.Column(db.String(128), nullable=False)
+
+    # Whether this user is the admin
     admin = db.Column(db.Boolean)
     
     def __init__(self, name, email, password, admin=False):

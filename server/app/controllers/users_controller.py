@@ -9,7 +9,7 @@ class UserController:
         if parameters['admin'] == 'true':
             admin = True
         
-        # Add to db
+        # Check if course email is not duplicate, save if not
         if not User.query.filter_by(email=parameters['email']).first():
             user = User(parameters['name'], parameters['email'],
                         parameters['password'], admin)
