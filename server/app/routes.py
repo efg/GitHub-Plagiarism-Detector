@@ -3,6 +3,7 @@ from app import get_app
 from app.utils.response import make_response
 from app.controllers.courses_controller import CourseController
 from app.controllers.users_controller import UserController
+from app.controllers.submissions_controller import SubmissionController
 
 app = get_app()
 
@@ -32,3 +33,16 @@ def user_new():
         return make_response('Server Error'), 500
     
     return make_response('Success'), 200
+
+@app.route('/submission/new', methods=['post'])
+def submission_new():
+    try:
+        duplicate_entries = SubmissionController.new(request.form, request.files)
+    except (ValueError, KeyError) as e:
+        print(e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        print(e)
+        return make_response('Server Error'), 500
+    
+    return make_response('Success', duplicate_entries), 200
