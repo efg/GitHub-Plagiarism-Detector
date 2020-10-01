@@ -9,10 +9,12 @@ class User(db.Model):
     name = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=False, index = True, unique=True)
     password = db.Column(db.String(128), nullable=False)
-
-    def __init__(self, course_id, name, email, password):
+    admin = db.Column(db.Boolean)
+    
+    def __init__(self, course_id, name, email, password, admin=False):
         self.course_id = course_id
         self.name = name
         self.email = email
         self.password = password
+        self.admin = admin
     
