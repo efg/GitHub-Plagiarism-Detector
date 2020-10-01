@@ -11,7 +11,7 @@ class UserController:
         
         # Add to db
         if not User.query.filter_by(email=parameters['email']).first():
-            user = User(int(parameters['course_id']), parameters['name'], parameters['email'],
+            user = User(parameters['name'], parameters['email'],
                         parameters['password'], admin)
             db.session.add(user)
             db.session.commit()
