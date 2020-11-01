@@ -16,7 +16,7 @@ class CourseController:
             raise ValueError("Course name '{}' already exists".format(parameters['name']))
 
     # List course names according to user ID
-    def show_courses(parameters):
+    def show_courses(self, parameters):
         is_admin = parameters['admin']
         user_id = parameters['user_id']
         course_names = []
