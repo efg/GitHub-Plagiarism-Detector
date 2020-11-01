@@ -1,6 +1,7 @@
 from app import db
 from app.models.submissions import Submission
 from app.utils.csv_parser import parse
+from app.models.checks import Check
 
 class SubmissionController:
     
@@ -29,3 +30,13 @@ class SubmissionController:
                 duplicate_entries.append([curr_team, curr_url])
 
         return duplicate_entries
+
+    @staticmethod
+    def list_submissions(parameters):
+
+        list_of_submissions = []
+        
+        for submission in Check.query.filter_by(id=parameters['check_id']).first().submissions:
+            list_of_submissions.append({'name': submission.name, 'github_url': submission.github_url})
+        
+        return list_of_submissions
