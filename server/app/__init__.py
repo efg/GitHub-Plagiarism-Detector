@@ -16,6 +16,6 @@ def get_app(Config=None):
     db.init_app(app)
     Migrate(app,db)
 
-    from app.models import users, courses, submissions, checks
+    from app.models import users, courses, submissions, checks, paths
 
     return app

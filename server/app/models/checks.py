@@ -11,6 +11,7 @@ class Check(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey("courses.id", ondelete='CASCADE'), nullable = False)
     name = db.Column(db.String(64), nullable=False)
+    language = db.Column(db.String(64), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     # Time interval after which to run the check again
