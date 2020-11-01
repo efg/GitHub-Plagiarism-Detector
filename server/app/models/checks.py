@@ -1,7 +1,7 @@
 from app import db
 from app.utils.languages import get_file_extensions
-from app.utils.directories import move_to_root_folder
-import os, git, mosspy
+from app.utils.directories import extract_files_from_dir
+import os, git, mosspy, shutil
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -16,6 +16,7 @@ class Check(db.Model):
     # Time interval after which to run the check again
     interval = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable = False)
+    paths = db.relationship('Path', backref='checks', lazy=True)
     submissions = db.relationship('Submission', backref='checks', lazy=True)
 
     def __init__(self, name, course_id, start_date, end_date, interval, is_active = True):
@@ -26,10 +27,27 @@ class Check(db.Model):
         self.interval = interval
         self.is_active = is_active
     
+    # Download github repositories and return the downloaded directory list
+    # Each check will create its own sub-folder in /app/files and clone all repositories in it
     def download_submissions(self):
-        pass
+        directories = []
+        # Make a new directory for current check
+        files_path = os.path.join(os.path.dirname(os.path.realpath('__file__')), 'app/files/')
+        check_dir_name = '{}_{}_{}'.format(self.course_id, self.id, self.name)
+        check_dir_path = os.path.join(files_path, check_dir_name)
+        os.mkdir(check_dir_path)
+        
+        # Clone all github repositories and 
+        for submission in self.submissions:
+            submission_dir = os.path.join(check_dir_path, '{}_{}'.format(submission.id, submission.name))
+            os.mkdir(submission_dir)
+            repo = git.Repo.clone_from(submission.github_url, submission_dir, branch='master')
+            if repo:
+                directories.append(submission_dir)
+        
+        return directories
 
-    def run_check(self, language, directories=[], files=[]):
+    def run_check(self, language, directories):
         # Load moss user id from env variables
         moss_user_id = os.getenv('MOSS_USER_ID')
         # Initialize Moss
@@ -41,12 +59,11 @@ class Check(db.Model):
             
             # Move files from subdirectories to parent directories and relevant language files
             for directory in directories:
-                move_to_root_folder(directory, directory)
+                extract_files_from_dir(directory, self.paths)
                 for ext in file_exts:
                     moss.addFilesByWildcard(directory + '*.{}'.format(ext))
         else:
-            for file in files:
-                moss.addFile(file)
+            return
         # Run Check
         url = moss.send()
         return url
