@@ -20,9 +20,10 @@ class Check(db.Model):
     paths = db.relationship('Path', backref='checks', lazy=True)
     submissions = db.relationship('Submission', backref='checks', lazy=True)
 
-    def __init__(self, name, course_id, start_date, end_date, interval, is_active = True):
+    def __init__(self, name, course_id, language, start_date, end_date, interval, is_active = True):
         self.name = name
         self.course_id = course_id
+        self.language = language
         self.start_date = start_date
         self.end_date = end_date
         self.interval = interval

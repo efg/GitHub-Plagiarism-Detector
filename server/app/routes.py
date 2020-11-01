@@ -15,6 +15,7 @@ app = get_app()
 def index():
     return '<br>&nbspHello World, Flask lives.'
 
+# ----------------Course------------------------
 # Add new course
 @app.route('/course/new', methods=['post'])
 def course_new():
@@ -39,6 +40,8 @@ def course_show():
 
     return make_response('Success', courses), 200
 
+
+# ----------------User------------------------
 # Add new user
 @app.route('/user/new', methods=['post'])
 def user_new():
@@ -51,6 +54,8 @@ def user_new():
     
     return make_response('Success'), 200
 
+
+# ----------------Submissions------------------------
 #Add a new list of submissions
 #duplicate entries will not be added and will be returned to the caller in a form of list
 @app.route('/submission/new', methods=['post'])
@@ -63,20 +68,7 @@ def submission_new():
         return make_response('Server Error'), 500
     
     return make_response('Success', duplicate_entries), 200
-
-
-#Add a new check
-@app.route('/check/new', methods=['post'])
-def check_new():
-    try:
-        ChecksController.new(request.form)
-    except (ValueError, KeyError) as e:
-        return make_response(e.args[0]), 400
-    except Exception as e:
-        return make_response('Server Error'), 500
     
-    return make_response('Success'), 200
-
 # Get all the submssions according to provided check_id
 @app.route('/submission/list', methods=['get'])
 def submission_list():
@@ -88,3 +80,29 @@ def submission_list():
         return make_response('Server Error'), 500
     
     return make_response('Success', list_of_submissions), 200
+
+
+# ----------------Check------------------------
+# Add a new check
+@app.route('/check/new', methods=['post'])
+def check_new():
+    try:
+        ChecksController.new(request.form)
+    except (ValueError, KeyError) as e:
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+    
+    return make_response('Success'), 200
+
+# Run the check with given check_id
+@app.route('/check/run', methods=['post'])
+def check_run():
+    try:
+        url = ChecksController.run(request.form)
+    except (ValueError, KeyError) as e:
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+    
+    return make_response('Success', url), 200

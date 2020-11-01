@@ -2,7 +2,8 @@ import os, shutil, sys
 
 def extract_files_from_dir(root_dir, sub_dirs):
     for sub_dir in sub_dirs:
-        sub_dir_path = os.path.join(root_dir, sub_dir)
+        # sub_dir_path = os.path.join(root_dir, sub_dir.path)
+        sub_dir_path = root_dir + sub_dir.path
         move_to_root_folder(root_dir, sub_dir_path)
 
 # Move all files from subdirectories to root directories
