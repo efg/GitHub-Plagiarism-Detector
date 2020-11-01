@@ -1,8 +1,7 @@
 from app import db
 from app.utils.languages import get_file_extensions
 from app.utils.directories import move_to_root_folder
-import mosspy
-import os
+import os, git, mosspy
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -17,6 +16,7 @@ class Check(db.Model):
     # Time interval after which to run the check again
     interval = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable = False)
+    submissions = db.relationship('Submission', backref='checks', lazy=True)
 
     def __init__(self, name, course_id, start_date, end_date, interval, is_active = True):
         self.name = name
@@ -26,6 +26,9 @@ class Check(db.Model):
         self.interval = interval
         self.is_active = is_active
     
+    def download_submissions(self):
+        pass
+
     def run_check(self, language, directories=[], files=[]):
         # Load moss user id from env variables
         moss_user_id = os.getenv('MOSS_USER_ID')
