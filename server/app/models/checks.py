@@ -29,17 +29,22 @@ class Check(db.Model):
         self.interval = interval
         self.is_active = is_active
     
+    # Returns the check directory path - <course_id>_<db_id>_<check_name>
+    def get_check_dir_path(self):
+        files_path = os.path.join(os.path.dirname(os.path.realpath('__file__')), 'app/files/')
+        check_dir_name = '{}_{}_{}'.format(self.course_id, self.id, self.name)
+        check_dir_path = os.path.join(files_path, check_dir_name)
+        return check_dir_path
+
     # Download github repositories and return the downloaded directory list
     # Each check will create its own sub-folder in /app/files and clone all repositories in it
     def download_submissions(self):
         directories = []
+        check_dir_path = self.get_check_dir_path()
         # Make a new directory for current check
-        files_path = os.path.join(os.path.dirname(os.path.realpath('__file__')), 'app/files/')
-        check_dir_name = '{}_{}_{}'.format(self.course_id, self.id, self.name)
-        check_dir_path = os.path.join(files_path, check_dir_name)
         os.mkdir(check_dir_path)
         
-        # Clone all github repositories and 
+        # Clone all github repositories and append the clone directory in 'directories' list
         for submission in self.submissions:
             submission_dir = os.path.join(check_dir_path, '{}_{}'.format(submission.id, submission.name))
             os.mkdir(submission_dir)
@@ -48,6 +53,12 @@ class Check(db.Model):
                 directories.append(submission_dir)
         
         return directories
+
+    # Removes the check directory along with its sub directories
+    # This will not remove directories in windows env because of permission issues
+    def remove_submissions(self):
+        check_dir_path = self.get_check_dir_path()
+        shutil.rmtree(check_dir_path, ignore_errors=True)
 
     def run_check(self, language, directories):
         # Load moss user id from env variables
@@ -63,14 +74,10 @@ class Check(db.Model):
             for directory in directories:
                 extract_files_from_dir(directory, self.paths)
                 for ext in file_exts:
-                    moss.addFilesByWildcard(directory + '*.{}'.format(ext))
+                    moss.addFilesByWildcard(directory + '/*.{}'.format(ext))
         else:
             return
         # Run Check
         url = moss.send()
+        
         return url
-
-
-
-
-

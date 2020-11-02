@@ -19,7 +19,9 @@ class ChecksController:
         # Download the latest submissions
         check = Check.query.filter_by(id = parameters["check_id"]).first()
         if check:
-            # check.download_submissions()
-            return check.run_check(check.language, check.download_submissions())
+            directories = check.download_submissions()
+            url = check.run_check(check.language, directories)
+            check.remove_submissions()
+            return url
         else:
             raise ValueError("Check with id {} is not present.".format(parameters["check_id"]))
