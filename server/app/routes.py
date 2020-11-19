@@ -54,6 +54,18 @@ def user_new():
     
     return make_response('Success'), 200
 
+# Login
+@app.route('/user/login', methods=['post'])
+def user_login():
+    try:
+        user_id = UserController.login(request.get_json())
+    except (ValueError, KeyError) as e:
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+    
+    return make_response('Success',user_id), 200
+
 
 # ----------------Submissions------------------------
 #Add a new list of submissions
@@ -82,7 +94,7 @@ def submission_list():
     return make_response('Success', list_of_submissions), 200
 
 
-# ----------------Check------------------------
+# ----------------Checks------------------------
 # Add a new check
 @app.route('/check/new', methods=['post'])
 def check_new():

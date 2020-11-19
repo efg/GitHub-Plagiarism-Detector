@@ -18,3 +18,17 @@ class UserController:
         else:
             # Duplicate email id, raise value error
             raise ValueError("User with email '{}' already exists".format(parameters['email']))
+
+
+    @staticmethod
+    def login(parameters):
+
+        user = User.query.filter_by(email=parameters['email']).first()
+        if not user:
+            raise ValueError("User with email '{}' doesn't exists".format(parameters['email']))
+        elif not  user.password == parameters['password']:
+            raise ValueError("Please check your password")
+        else:
+            return user.id
+        
+        
