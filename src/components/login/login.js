@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { useHistory } from "react-router";
 import axios from 'axios';
 import './login.css';
 
@@ -18,13 +17,11 @@ class Login extends Component{
         this.setState({
           [name]: value
         });
-        // console.log(this.state);
     }
     handleSubmit = async ()=>{
         const email = this.state.email;
         const password = this.state.password;
-        
-        // console.log(this.state.email);
+
        await axios.post('http://127.0.0.1:5000/user/login', { email, password })
       .then(res => {
         // Redirect to next page here
@@ -71,7 +68,7 @@ class Login extends Component{
                                     </div>
                                     <div class="form-group mb-0">
                                         <div class="row no-gutters">
-                                            <div class="col-sm-12"><a class="btn btn-falcon-primary btn-block mt-2" href="#"><span class="fab fa-google-plus-g mr-2" data-fa-transform="grow-8"></span> Request an account</a></div>
+                                            <div class="col-sm-12"><a class="btn btn-falcon-primary btn-block mt-2" href="www.google.com"><span class="fab fa-google-plus-g mr-2" data-fa-transform="grow-8"></span> Request an account</a></div>
                                         </div>
                                     </div>
                                 </div>

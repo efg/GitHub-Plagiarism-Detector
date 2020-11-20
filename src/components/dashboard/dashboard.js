@@ -1,25 +1,39 @@
 import React, { Component } from 'react';
-// import { BrowserRouter, Route, Switch } from 'react-router-dom';
-// import Login from './../login/login';
+import axios from 'axios';
+import Course from './course/course';
 // import './dashboard.css';
-import Card from './card/card';
 class Dashboard extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            displayChecks: false,
+            courses: [],
+            checks: [],
+        };
+    }
+    async componentDidMount() {
+        const user_id = localStorage.getItem('user_id');
+        const admin = localStorage.getItem('admin');
+        await axios.get('http://127.0.0.1:5000/course/list?user_id=' + user_id + '&admin=' + admin)
+        .then(res => {
+            console.log(localStorage.getItem('admin'))
+            console.log(res.data['payload'])
+            this.setState({courses: res.data['payload']})
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+    }
+    getDisplayComponent(){
+        if(this.state.displayChecks)
+            return <h1>Checks</h1>;
+        return <Course courses={this.state.courses} />
     }
     render(){
+        let secondComponent = this.getDisplayComponent(); 
         return(
             <div class="container">
-                <div class="card overflow-hidden mb-3">
-                    <div class="card-body p-2">
-                        <div class="row justify-content-between align-items-center">
-                            <div class="col">
-                                Test
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <Card name="Test Name" info="Test Info" attr="Count" attrCount="3"/>
+                {secondComponent}
             </div>
         );
     }
