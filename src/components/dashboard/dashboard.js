@@ -11,6 +11,7 @@ class Dashboard extends Component{
             courses: [],
             checks: [],
         };
+        this.getChecks = this.getChecks.bind(this);
     }
     async componentDidMount() {
         const user_id = localStorage.getItem('user_id');
@@ -25,16 +26,15 @@ class Dashboard extends Component{
     }
 
     async getChecks(course_id){
-        console.log(course_id);
         await axios.get('http://127.0.0.1:5000/check/list?course_id=' + course_id)
         .then(res => {
-            this.setState({displayChecks: true, checks: res.data['payload']})
-            console.log(res.data['payload'])
+            this.setState({displayChecks: true, checks: res.data['payload']});
+            console.log(res.data['payload']);
         })
       .catch((error) => {
             console.log(error['message']);
         });
-    }
+    };
 
     getDisplayComponent(){
         if(this.state.displayChecks)

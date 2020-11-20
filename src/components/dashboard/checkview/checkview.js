@@ -12,7 +12,7 @@ class CheckView extends Component{
                   name={check.name} 
                   infoAttr="Start Date"
                   infoVal={check.start_date}
-                  attr="Language"
+                  attr="Language:"
                   attrVal={check.language}
                 //   onViewPress={this.getChecks}
             />);

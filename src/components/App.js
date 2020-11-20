@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Login from './login/login';
 import Dashboard from './dashboard/dashboard';
-// import Check from './check/check';
 
 class App extends Component{
   loggedIn(){
