@@ -32,7 +32,7 @@ def course_new():
 @app.route('/course/list', methods=['get'])
 def course_show():
     try:
-        courses = CourseController.show_courses(request.values)
+        courses = CourseController.show_courses(request.args)
     except (ValueError, KeyError) as e:
         return make_response(e.args[0]), 400
     except Exception as e:
@@ -64,7 +64,7 @@ def user_login():
     except Exception as e:
         return make_response('Server Error'), 500
     
-    return make_response('Success',user_data), 200
+    return make_response('Success',[1, 0]), 200
 
 
 # ----------------Submissions------------------------

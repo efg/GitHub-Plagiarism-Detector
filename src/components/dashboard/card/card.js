@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './card.css';
 class Card extends Component{
     constructor(props){
         super(props);
         this.state = {};
     }
-    // componentDidMount() {
-    //     const user_id = 1;
-    //     const admin = 0;
-    //     await axios.get('http://127.0.0.1:5000/course/list', { user_id, admin })
-    //     .then(res => {
-
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.response.data);
-    //   });
-    // }
+    async componentDidMount() {
+        const user_id = localStorage.getItem('user_id');
+        const admin = localStorage.getItem('admin');
+        await axios.get('http://127.0.0.1:5000/course/list?user_id=' + user_id + '&admin=' + admin)
+        .then(res => {
+            console.log(res.data['payload'])
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+    }
+    
     render(){
         return(
             <div class="col-sm-3 pr-0">
