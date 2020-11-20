@@ -20,7 +20,8 @@ def index():
 @app.route('/course/new', methods=['post'])
 def course_new():
     try:
-        CourseController.new(request.form)
+        print(request.get_json())
+        CourseController.new(request.get_json())
     except (ValueError, KeyError) as e:
         return make_response(e.args[0]), 400
     except Exception as e:
