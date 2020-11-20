@@ -21,7 +21,7 @@ class CourseController:
         user_id = parameters.get('user_id')
         course_names = []
         # Fetch all courses if admin
-        if is_admin == "1":
+        if is_admin == 1:
             courses = Course.query.all()
         # Only fetch courses corresponding to given user ID
         else:

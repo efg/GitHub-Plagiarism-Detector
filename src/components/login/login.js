@@ -30,6 +30,8 @@ class Login extends Component{
         // Redirect to next page here
         localStorage.setItem('user_id', res.data['payload'][0]);
         localStorage.setItem('admin', res.data['payload'][1]);
+        
+        window.location.reload();
         // useHistory().push("/dashboard");
       })
       .catch((error) => {
