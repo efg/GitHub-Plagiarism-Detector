@@ -16,16 +16,16 @@ class CourseController:
             raise ValueError("Course name '{}' already exists".format(parameters['name']))
 
     # List course names according to user ID
-    def show_courses(self, parameters):
-        is_admin = parameters['admin']
-        user_id = parameters['user_id']
+    def show_courses(parameters):
+        is_admin = parameters.get('admin')
+        user_id = parameters.get('user_id')
         course_names = []
         # Fetch all courses if admin
-        if is_admin == "true":
+        if is_admin == "1":
             courses = Course.query.all()
         # Only fetch courses corresponding to given user ID
         else:
-            courses = Course.query.filter_by(user_id = parameters['user_id'])
+            courses = Course.query.filter_by(user_id = parameters.get('user_id'))
         for course in courses:
             course_names.append(course.name)
         return course_names

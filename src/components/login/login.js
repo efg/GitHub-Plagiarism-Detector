@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { useHistory } from "react-router";
+import axios from 'axios';
 import './login.css';
 
 class Login extends Component{
@@ -16,12 +18,30 @@ class Login extends Component{
         this.setState({
           [name]: value
         });
-        console.log(this.state);
+        // console.log(this.state);
+    }
+    handleSubmit = async ()=>{
+        const email = this.state.email;
+        const password = this.state.password;
+        
+        // console.log(this.state.email);
+       await axios.post('http://127.0.0.1:5000/user/login', { email, password })
+      .then(res => {
+        // Redirect to next page here
+        localStorage.setItem('user_id', res.data['payload'][0]);
+        localStorage.setItem('admin', res.data['payload'][1]);
+        // useHistory().push("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        // useHistory().push("/dashboard");
+      });
+
     }
     render(){
         return(
             <div class="container">
-                <form class="sign-in-form">
+                {/* <form class="sign-in-form" > */}
                     <div class="row flex-center min-vh-50 py-6">
                         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5">
                             <div class="card">
@@ -41,7 +61,7 @@ class Login extends Component{
                                         <input class="form-control" type="password" name="password" id="inputPassword" placeholder="Password" onChange={this.handleChange} />
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-primary btn-block mt-3" type="submit">Sign in  </button>
+                                        <button class="btn btn-primary btn-block mt-3" onClick={this.handleSubmit}>Sign in  </button>
                                     </div>
                                     <div class="w-100 position-relative mt-4">
                                         <hr class="text-300" />
@@ -56,7 +76,7 @@ class Login extends Component{
                             </div>
                         </div>
                     </div>
-                </form>
+                {/* </form> */}
             </div>  
         );
     }

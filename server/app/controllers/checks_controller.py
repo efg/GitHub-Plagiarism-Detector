@@ -1,6 +1,7 @@
-from app import db
+from app import db, scheduler
 from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
+# import datetime
 
 class ChecksController:
     @staticmethod
@@ -8,6 +9,9 @@ class ChecksController:
         # See if check name is not duplicate for this course
         if not Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first():
             # Create a new entry (record) for checks table and save to db
+            
+            # scheduler.add_job(func = ChecksController.test, trigger = "interval", minutes = 1, args = {"check_id" : 1}, next_run_time=datetime.datetime.now())
+            # scheduler.start()
             check = Check(parameters['name'], int(parameters['course_id']), parameters['language'], parameters['start_date'], parameters['end_date'], parameters['interval'], True)
             db.session.add(check)
             db.session.commit()

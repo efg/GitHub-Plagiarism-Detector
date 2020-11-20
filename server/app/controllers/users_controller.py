@@ -29,6 +29,6 @@ class UserController:
         elif not  user.password == parameters['password']:
             raise ValueError("Please check your password")
         else:
-            return user.id
+            return [user.id, user.admin]
         
         
