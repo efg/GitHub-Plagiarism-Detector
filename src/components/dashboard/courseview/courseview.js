@@ -9,10 +9,10 @@ class CourseView extends Component{
     }
     getCard(course){
         return  (
-            <Card key={course.id}
+            <Card id={course.id}
                   name={course.name} 
                   infoAttr="Course Status"
-                  info={(course.active === true)? "Active": "Not Active"}
+                  infoVal={(course.active === true)? "Active": "Not Active"}
                   onViewPress={this.props.getChecks}
             />);
     }

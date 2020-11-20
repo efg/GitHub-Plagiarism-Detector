@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import './card.css';
 
 class Card extends Component{
-    constructor(props){
-        super(props);
-        this.state = {};
-    }
     render(){
         return(
             <div class="col-sm-3 pr-0">
@@ -17,14 +13,14 @@ class Card extends Component{
                     <div class="card-body fs--1 pt-0">
                         <div class="list-group-flush">
                             <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-1">
-                                <p class="mb-0">{this.props.attr}</p>
-                                <p class="mb-0">{this.props.attrVal}</p>
+                                {/* <p class="mb-0">{this.props.attr}</p>
+                                <p class="mb-0">{this.props.attrVal}</p> */}
+                                <p class="card-text p-0 card-text-muted">{this.props.attr} {this.props.attrVal}</p>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer bg-light p-0">
-                    {this.props.onViewPress}
-                        <button class="btn btn-sm btn-link btn-block py-2" onClick={() => this.props.onViewPress(this.props.key)}>View</button>
+                        <button class="btn btn-sm btn-link btn-block py-2" onClick={() => this.props.onViewPress(this.props.id)}>View</button>
                     </div>
                 </div>
             </div>
