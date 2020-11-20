@@ -27,5 +27,5 @@ class CourseController:
         else:
             courses = Course.query.filter_by(user_id = parameters.get('user_id'))
         for course in courses:
-            course_names.append(course.name)
+            course_names.append({'id':course.id, 'name' : course.name, 'active' : course.active})
         return course_names

@@ -11,6 +11,7 @@ class Card extends Component{
         const admin = localStorage.getItem('admin');
         await axios.get('http://127.0.0.1:5000/course/list?user_id=' + user_id + '&admin=' + admin)
         .then(res => {
+            console.log(localStorage.getItem('admin'))
             console.log(res.data['payload'])
       })
       .catch((error) => {
