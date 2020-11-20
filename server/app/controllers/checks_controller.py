@@ -1,5 +1,6 @@
 from app import db
 from app.models.checks import Check
+from app.controllers.submissions_controller import SubmissionController
 
 class ChecksController:
     @staticmethod
@@ -13,6 +14,10 @@ class ChecksController:
         else: 
             # Raise value error if duplicate check name for this course 
             raise ValueError("Check name '{}' for course {} already exists.".format(parameters['name'], parameters['course_id']))
+        
+        curr_check = Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first()
+        if curr_check:
+            SubmissionController.new({'check_id':curr_check.id, 'header':False},parameters['csvFile'])
 
     @staticmethod
     def run(parameters):
