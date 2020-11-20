@@ -64,7 +64,7 @@ def user_login():
     except Exception as e:
         return make_response('Server Error'), 500
     
-    return make_response('Success',[1, 0]), 200
+    return make_response('Success',user_data), 200
 
 
 # ----------------Submissions------------------------
@@ -110,6 +110,19 @@ def check_new():
         return make_response('Server Error'), 500
     
     return make_response('Success'), 200
+
+# List checks for a course
+@app.route('/check/list', methods=['get'])
+def checks_show():
+    try:
+        checks = ChecksController.show_checks(request.args)
+    except (ValueError, KeyError) as e:
+        print(e.args[0])
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', checks), 200
 
 # Run the check with given check_id
 @app.route('/check/run', methods=['post'])

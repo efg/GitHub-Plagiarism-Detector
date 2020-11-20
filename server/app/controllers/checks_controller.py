@@ -27,6 +27,17 @@ class ChecksController:
 
         
     @staticmethod
+    def show_checks(parameters):
+        course_id = parameters.get('course_id')
+        checks_list = []
+        # Fetch checks corresponding to given course ID
+        checks = Check.query.filter_by(course_id = course_id)
+        for check in checks:
+            checks_list.append({'id':check.id, 'name' : check.name, 'language' : check.language, 'start_date' : check.start_date})
+        return checks_list
+
+
+    @staticmethod
     def run(parameters):
         # Download the latest submissions
         check = Check.query.filter_by(id = parameters["check_id"]).first()
