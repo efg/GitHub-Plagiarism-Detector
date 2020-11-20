@@ -28,20 +28,20 @@ class Login extends Component{
        await axios.post('http://127.0.0.1:5000/user/login', { email, password })
       .then(res => {
         // Redirect to next page here
-        console.log(res);
-        console.log(res.message);
-        useHistory().push("/dashboard");
+        localStorage.setItem('user_id', res.data['payload'][0]);
+        localStorage.setItem('admin', res.data['payload'][1]);
+        // useHistory().push("/dashboard");
       })
       .catch((error) => {
         console.log(error.response.data);
-        useHistory().push("/dashboard");
+        // useHistory().push("/dashboard");
       });
 
     }
     render(){
         return(
             <div class="container">
-                <form class="sign-in-form" method="post">
+                {/* <form class="sign-in-form" > */}
                     <div class="row flex-center min-vh-50 py-6">
                         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5">
                             <div class="card">
@@ -76,7 +76,7 @@ class Login extends Component{
                             </div>
                         </div>
                     </div>
-                </form>
+                {/* </form> */}
             </div>  
         );
     }

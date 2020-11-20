@@ -5,6 +5,17 @@ class Card extends Component{
         super(props);
         this.state = {};
     }
+    // componentDidMount() {
+    //     const user_id = 1;
+    //     const admin = 0;
+    //     await axios.get('http://127.0.0.1:5000/course/list', { user_id, admin })
+    //     .then(res => {
+
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response.data);
+    //   });
+    // }
     render(){
         return(
             <div class="col-sm-3 pr-0">

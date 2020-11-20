@@ -58,13 +58,13 @@ def user_new():
 @app.route('/user/login', methods=['post'])
 def user_login():
     try:
-        user_id = UserController.login(request.get_json())
+        user_data = UserController.login(request.get_json())
     except (ValueError, KeyError) as e:
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
     
-    return make_response('Success',user_id), 200
+    return make_response('Success',user_data), 200
 
 
 # ----------------Submissions------------------------
