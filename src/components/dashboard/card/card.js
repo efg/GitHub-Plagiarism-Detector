@@ -12,13 +12,13 @@ class Card extends Component{
                 <div class="card mb-3 shadow-sm">
                     <div class="card-body">
                         <h6 class="pb-0">{this.props.name}</h6>
-                        <p class="card-text pb-1"><small class="text-muted">{this.props.infoAttr}: {this.props.info}</small></p>           
+                        <p class="card-text pb-1"><small class="text-muted">{this.props.infoAttr}: {this.props.infoVal}</small></p>           
                     </div>
                     <div class="card-body fs--1 pt-0">
                         <div class="list-group-flush">
                             <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-1">
                                 <p class="mb-0">{this.props.attr}</p>
-                                <p class="mb-0">{this.props.attrCount}</p>
+                                <p class="mb-0">{this.props.attrVal}</p>
                             </div>
                         </div>
                     </div>

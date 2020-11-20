@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import Card from './../card/card'; 
+import Card from '../card/card'; 
 
-class Course extends Component{
+class CheckView extends Component{
     constructor(props){
         super(props);
-        // console.log(props.courses);
         this.getCard = this.getCard.bind(this);
     }
-    getCard(course){
-        console.log(course);
+    getCard(check){
         return  (
-            <Card key={course.id}
-                  name={course.name} 
-                  infoAttr="Course Status"
-                  info={(course.active === true)? "Active": "Not Active"}
+            <Card key={check.id}
+                  name={check.name} 
+                  infoAttr="Start Date"
+                  infoVal={check.start_date}
+                  attr="Language"
+                  attrVal={check.language}
                 //   onViewPress={this.getChecks}
             />);
     }
@@ -24,19 +24,19 @@ class Course extends Component{
                     <div class="card-body p-2">
                         <div class="row justify-content-between align-items-center pd">
                             <div class="col">
-                                Courses
+                                Checks
                             </div>
                             <div class="col">
-                                <button class="btn btn-falcon-primary float-right" onClick={this.handleSubmit}>New Course</button>
+                                <button class="btn btn-falcon-primary float-right" onClick={this.handleSubmit}>New Check</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mr-1">
-                    {this.props.courses.map((course) => this.getCard(course))}
+                    {this.props.checks.map((check) => this.getCard(check))}
                 </div>
             </div>
         );
     }
 }
-export default Course;
+export default CheckView;

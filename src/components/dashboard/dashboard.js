@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Course from './course/course';
+import CourseView from './courseview/courseview';
+import CheckView from './checkview/checkview';
 // import './dashboard.css';
 class Dashboard extends Component{
     constructor(props){
@@ -16,7 +17,6 @@ class Dashboard extends Component{
         const admin = localStorage.getItem('admin');
         await axios.get('http://127.0.0.1:5000/course/list?user_id=' + user_id + '&admin=' + admin)
         .then(res => {
-            console.log(res.data['payload'])
             this.setState({courses: res.data['payload']})
       })
       .catch((error) => {
@@ -24,9 +24,11 @@ class Dashboard extends Component{
       });
     }
 
-    async fetchChecks(course_id){
+    async getChecks(course_id){
+        console.log(course_id);
         await axios.get('http://127.0.0.1:5000/check/list?course_id=' + course_id)
         .then(res => {
+            this.setState({displayChecks: true, checks: res.data['payload']})
             console.log(res.data['payload'])
         })
       .catch((error) => {
@@ -36,8 +38,8 @@ class Dashboard extends Component{
 
     getDisplayComponent(){
         if(this.state.displayChecks)
-            return <h1>Checks</h1>;
-        return <Course courses={this.state.courses} />
+            return <CheckView checks={this.state.checks} />;
+        return <CourseView courses={this.state.courses} getChecks={this.getChecks}/>
     }
     render(){
         let secondComponent = this.getDisplayComponent(); 
