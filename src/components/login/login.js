@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './login.css';
 
 class Login extends Component{
@@ -16,12 +17,28 @@ class Login extends Component{
         this.setState({
           [name]: value
         });
-        console.log(this.state);
+        // console.log(this.state);
+    }
+    handleSubmit = async ()=>{
+        const email = this.state.email;
+        const password = this.state.password;
+        
+        // console.log(this.state.email);
+       await axios.post('http://127.0.0.1:5000/user/login', { email, password })
+      .then(res => {
+        // Redirect to next page here
+        console.log(res);
+        console.log(res.message);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+
     }
     render(){
         return(
             <div class="container">
-                <form class="sign-in-form">
+                <form class="sign-in-form" onSubmit = {this.handleSubmit}>
                     <div class="row flex-center min-vh-50 py-6">
                         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5">
                             <div class="card">
