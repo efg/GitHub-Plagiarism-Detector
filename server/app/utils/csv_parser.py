@@ -15,5 +15,5 @@ def parse(csv_file, header):
     # Iterate over each row in the csv file
     for row in csv_input:
         entries.append(row)
-
+    print(entries)
     return entries

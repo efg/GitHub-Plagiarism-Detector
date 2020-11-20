@@ -98,11 +98,15 @@ def submission_list():
 # Add a new check
 @app.route('/check/new', methods=['post'])
 def check_new():
+    print("Check/new got called")
     try:
-        ChecksController.new(request.form)
+        # print(request.form)
+        ChecksController.new(request.form, request.files['file'] )
     except (ValueError, KeyError) as e:
+        print("error",e)
         return make_response(e.args[0]), 400
     except Exception as e:
+        print(e)
         return make_response('Server Error'), 500
     
     return make_response('Success'), 200

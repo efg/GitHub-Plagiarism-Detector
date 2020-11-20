@@ -15,19 +15,22 @@ class App extends Component{
 
   render(){
     return(
-      // <BrowserRouter>
-      //   <div>
-      //       <Switch>
-      //         <Route path="/index">
-      //           <Login />
-      //         </Route>
-      //         <Route path="/dashboard">
-      //           <Dashboard />
-      //         </Route>
-      //      </Switch>
-      //   </div>
-      // </BrowserRouter>
-      this.loggedIn()
+      <BrowserRouter>
+        <div>
+            <Switch>
+              <Route path="/index">
+                <Login />
+              </Route>
+              <Route path="/dashboard">
+                <Dashboard />
+              </Route>
+             <Route path="/check">
+                <Check />
+              </Route>
+           </Switch>
+        </div>
+      </BrowserRouter>
+      // this.loggedIn()
     );
   }
 }

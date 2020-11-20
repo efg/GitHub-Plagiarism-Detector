@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './check.css';
+import axios from 'axios';
 import languages from './languages.json';
 
 class Check extends Component{
@@ -16,7 +17,7 @@ class Check extends Component{
             start_date:"",
             end_date:"",
             interval:"",
-            csvFile:"",
+            csvFile:null,
             header:''
         };
     }
@@ -32,12 +33,47 @@ class Check extends Component{
         } else {
             this.state.header = 'False';
         }
+        // this.state.csvFile = event.target.files[0];
         console.log(this.state);
+    }
+
+    uploadFile=event=>{
+        this.setState({
+            csvFile: event.target.files[0],
+            loaded: 0,
+          })
+    }
+
+
+    handleSubmit = async ()=>{
+
+        const data = new FormData()
+        data.append('name', this.state.name)
+        data.append('course_id', this.state.course_id)
+        data.append('language', this.state.language)
+        data.append('start_date', this.state.start_date)
+        data.append('end_date', this.state.end_date)
+        data.append('interval', this.state.interval)
+        data.append('header', this.state.header)
+        data.append('file', this.state.csvFile)
+
+
+    await axios.post('http://127.0.0.1:5000/check/new', data)   
+    .then(res => {
+        // Redirect to next page here
+        console.log("Success");
+        // useHistory().push("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        // useHistory().push("/dashboard");
+      });
+
     }
     render(){
         return(
             <div class="container">
-                <form class="new-check-form" encType="multipart/form-data">
+                {/* <form class="new-check-form"> */}
                     <div class="row flex-center min-vh-50 py-6">
                         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5">
                             <div class="card">
@@ -80,7 +116,7 @@ class Check extends Component{
                                     </div>
                                     <div class="form-group">
                                         <label for="csvFile">CSV file of submissions</label>
-                                        <input class="form-control" type="file" name="csvFile" id="csvFile" onChange={this.handleChange} />
+                                        <input class="form-control" type="file" name="csvFile" id="csvFile" onChange={this.uploadFile} />
                                     </div>
                                     <div class="form-group">
                                         {/* <label for="header">Is header row present?</label> */}
@@ -89,13 +125,13 @@ class Check extends Component{
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-primary btn-block mt-3" type="submit">Create Check</button>
+                                        <button class="btn btn-primary btn-block mt-3" onClick={this.handleSubmit}>Create Check</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                {/* </form> */}
             </div>  
         );
     }

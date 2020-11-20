@@ -14,7 +14,7 @@ class SubmissionController:
         duplicate_entries = []
         check_id = parameters['check_id']
 
-        csv_entries = parse(param_file['csv_file'],parameters['header'])        # csv_entries = [[team_name, github_url]]
+        csv_entries = parse(param_file,parameters['header'])        # csv_entries = [[team_name, github_url]]
 
         # Iterate over submission_ids
         for i, entry in enumerate(csv_entries):
