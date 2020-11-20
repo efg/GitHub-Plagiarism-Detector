@@ -1,11 +1,12 @@
 from app import db, scheduler
 from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
-# import datetime
+from app.utils.csv_parser import parse
+
 
 class ChecksController:
     @staticmethod
-    def new(parameters):
+    def new(parameters,file=None):
         # See if check name is not duplicate for this course
         if not Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first():
             # Create a new entry (record) for checks table and save to db
@@ -21,8 +22,10 @@ class ChecksController:
         
         curr_check = Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first()
         if curr_check:
-            SubmissionController.new({'check_id':curr_check.id, 'header':False},parameters['csvFile'])
+            duplicates = SubmissionController.new({'check_id':curr_check.id, 'header':parameters['header']},file)
+        print(duplicates)
 
+        
     @staticmethod
     def show_checks(parameters):
         course_id = parameters.get('course_id')
