@@ -23,7 +23,7 @@ class CheckView extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getChecks = this.getChecks.bind(this);
+    this.getReports = this.getReports.bind(this);
     for (var i in languages) this.state.languages.push(i);
   }
 
@@ -42,8 +42,17 @@ class CheckView extends Component {
     );
   }
 
-  getChecks(check_id){
+  async getReports(check_id){
     console.log(check_id);
+    await axios.get('http://127.0.0.1:5000/report/list?check_id=' + check_id)
+        .then(res => {
+            // Report data (payload) is in format: date: "Sun, 01 Nov 2020 19:10:25 GMT" report: "www.mosslink.com" status: true
+            // console.log(res.data['payload']);
+        })
+      .catch((error) => {
+            console.log(error['message']);
+        });
+
   }
 
   handleChange = (event) => {

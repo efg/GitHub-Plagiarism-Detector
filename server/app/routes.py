@@ -153,6 +153,7 @@ def reports_show():
     return make_response('Success', reports), 200
 
 # Create new entry in reports table
+@app.route('/report/new', methods=['post'])
 def report_new():
     try:
         ReportsController.new(request.form)
