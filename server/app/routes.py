@@ -5,6 +5,7 @@ from app.controllers.courses_controller import CourseController
 from app.controllers.users_controller import UserController
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.checks_controller import ChecksController
+from app.controllers.reports_controller import ReportsController
 
 
 app = get_app()
@@ -61,6 +62,7 @@ def user_login():
     try:
         user_data = UserController.login(request.get_json())
     except (ValueError, KeyError) as e:
+        print(e)
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
@@ -99,7 +101,6 @@ def submission_list():
 # Add a new check
 @app.route('/check/new', methods=['post'])
 def check_new():
-    print("Check/new got called")
     try:
         # print(request.form)
         ChecksController.new(request.form, request.files['file'] )
@@ -136,3 +137,30 @@ def check_run():
         return make_response('Server Error'), 500
     
     return make_response('Success', url), 200
+
+# ----------------------Reports------------------------
+# Get reports for a check id
+@app.route('/report/list', methods=['get'])
+def reports_show():
+    try:
+        reports = ReportsController.show_reports(request.args)
+    except (ValueError, KeyError) as e:
+        print(e.args[0])
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', reports), 200
+
+# Create new entry in reports table
+def report_new():
+    try:
+        ReportsController.new(request.form)
+    except (ValueError, KeyError) as e:
+        print("error",e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        print(e)
+        return make_response('Server Error'), 500
+    
+    return make_response('Success'), 200
