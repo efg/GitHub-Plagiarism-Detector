@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 export default class CourseModal extends Component {
-    constructor(props){
-        super(props);
-    }
-    
     render() {   
       return (
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

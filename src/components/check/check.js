@@ -5,9 +5,6 @@ import languages from './languages.json';
 
 class Check extends Component{
     constructor(props){
-        let result = [];
-        for(var i in languages)
-            result.push(i);
         super(props);
         this.state = {
             name:"",

@@ -19,6 +19,7 @@ class CourseView extends Component {
   getCard(course) {
     return (
       <Card
+        key={course.id}
         id={course.id}
         name={course.name}
         infoAttr="Course Status"

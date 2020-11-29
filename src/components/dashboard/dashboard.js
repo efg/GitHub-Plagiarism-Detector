@@ -8,6 +8,7 @@ class Dashboard extends Component{
         super(props);
         this.state = {
             displayChecks: false,
+            selectedCourse: -1,
             courses: [],
             checks: [],
         };
@@ -28,7 +29,7 @@ class Dashboard extends Component{
     async getChecks(course_id){
         await axios.get('http://127.0.0.1:5000/check/list?course_id=' + course_id)
         .then(res => {
-            this.setState({displayChecks: true, checks: res.data['payload']});
+            this.setState({selectedCourse: course_id, displayChecks: true, checks: res.data['payload']});
             console.log(res.data['payload']);
         })
       .catch((error) => {
@@ -38,7 +39,7 @@ class Dashboard extends Component{
 
     getDisplayComponent(){
         if(this.state.displayChecks)
-            return <CheckView checks={this.state.checks} />;
+            return <CheckView courseId={this.state.selectedCourse} getChecks={this.getChecks} checks={this.state.checks} />;
         return <CourseView courses={this.state.courses} getChecks={this.getChecks}/>
     }
     render(){
