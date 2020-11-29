@@ -9,7 +9,6 @@ class CheckView extends Component {
     super(props);
     // let result = [];
     this.state = {
-      checks: this.props.checks,
       name: "",
       course_id: this.props.courseId,
       language: "",
@@ -108,7 +107,7 @@ class CheckView extends Component {
             </div>
           </div>
           <div class="row mr-1">
-            {this.state.checks.map((check) => this.getCard(check))}
+            {this.props.checks.map((check) => this.getCard(check))}
           </div>
         </div>
         <CheckModal
