@@ -5,11 +5,13 @@ class ListView extends Component{
         this.state = {
             count: 0,
         };
+        this.getTabRows = this.getTabRows.bind(this);
     };
     getTabRows(tabRow){
+        this.setState({count: this.state.count+1});
         return(
-            <tr key={this.state.count+1}>
-                <th scope="row">{this.state.count+1}</th>
+            <tr key={this.state.count}>
+                <th scope="row">{this.state.count}</th>
                 <td>{tabRow.date}</td>
                 <td>{tabRow.status}</td>
                 <td>{tabRow.report}</td>
