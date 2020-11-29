@@ -30,7 +30,7 @@ class Dashboard extends Component{
         await axios.get('http://127.0.0.1:5000/check/list?course_id=' + course_id)
         .then(res => {
             this.setState({selectedCourse: course_id, displayChecks: true, checks: res.data['payload']});
-            console.log(res.data['payload']);
+            // console.log(res.data['payload']);
         })
       .catch((error) => {
             console.log(error['message']);

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 class CheckModal extends Component {
+    constructor(props){
+        super(props);
+        console.log(props);
+    }
     render() {   
       return (
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

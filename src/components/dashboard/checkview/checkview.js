@@ -7,13 +7,13 @@ import languages from "../../../resources/languages.json";
 class CheckView extends Component {
   constructor(props) {
     super(props);
-    let result = [];
+    // let result = [];
     this.state = {
       checks: this.props.checks,
       name: "",
       course_id: this.props.courseId,
       language: "",
-      languages: result,
+      languages: [],
       start_date: "",
       end_date: "",
       interval: "",
@@ -24,7 +24,7 @@ class CheckView extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    for (var i in languages) result.push(i);
+    for (var i in languages) this.state.languages.push(i);
   }
 
   getCard(check) {
@@ -115,6 +115,7 @@ class CheckView extends Component {
           handleChange={this.handleChange}
           uploadFile={this.uploadFile}
           handleSubmit={this.handleSubmit}
+          languages={this.state.languages}
         />
       </div>
     );
