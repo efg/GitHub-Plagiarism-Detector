@@ -23,6 +23,7 @@ class CheckView extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.getChecks = this.getChecks.bind(this);
     for (var i in languages) this.state.languages.push(i);
   }
 
@@ -36,9 +37,13 @@ class CheckView extends Component {
         infoVal={check.start_date}
         attr="Language:"
         attrVal={check.language}
-        //   onViewPress={this.getChecks}
+        onViewPress={this.getChecks}
       />
     );
+  }
+
+  getChecks(check_id){
+    console.log(check_id);
   }
 
   handleChange = (event) => {
