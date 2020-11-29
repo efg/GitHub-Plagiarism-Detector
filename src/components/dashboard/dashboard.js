@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Navbar from '../navigation/navbar';
 import CourseView from './courseview/courseview';
 import CheckView from './checkview/checkview';
 // import './dashboard.css';
@@ -45,9 +46,13 @@ class Dashboard extends Component{
     render(){
         let secondComponent = this.getDisplayComponent(); 
         return(
-            <div class="container">
-                {secondComponent}
+            <div>
+                <Navbar onLogOut={this.props.onLogOut}/>
+                <div class="container">
+                    {secondComponent}
+                </div>
             </div>
+            
         );
     }
 }

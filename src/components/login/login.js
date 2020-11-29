@@ -27,8 +27,8 @@ class Login extends Component{
         // Redirect to next page here
         localStorage.setItem('user_id', res.data['payload'][0]);
         localStorage.setItem('admin', res.data['payload'][1]);
-        
-        window.location.reload();
+        this.props.onLogIn(res.data['payload'][0]);
+        // window.location.reload();
         // useHistory().push("/dashboard");
       })
       .catch((error) => {
