@@ -19,7 +19,6 @@ class ChecksController:
             db.session.add(check)
             db.session.commit()
             print(check.id)
-            ChecksController.run({"check_id" : check.id})
         else: 
             # Raise value error if duplicate check name for this course 
             raise ValueError("Check name '{}' for course {} already exists.".format(parameters['name'], parameters['course_id']))
@@ -28,6 +27,7 @@ class ChecksController:
         if curr_check:
             duplicates = SubmissionController.new({'check_id':curr_check.id, 'header':parameters['header']},file)
         print(duplicates)
+        ChecksController.run({"check_id" : check.id})
 
         
     @staticmethod

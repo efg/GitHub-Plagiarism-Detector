@@ -43,6 +43,11 @@ class Login extends Component{
                 {/* <form class="sign-in-form" > */}
                     <div class="row flex-center min-vh-50 py-6">
                         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5">
+                            <div class="col-auto fancy-font">
+                                <p class="navbar-brand">
+                                    GitHub Plag Checker
+                                </p>
+                            </div>
                             <div class="card">
                                 <div class="card-header">
                                     <div class="col-auto fancy-font">
