@@ -144,6 +144,7 @@ def check_run():
 def reports_show():
     try:
         reports = ReportsController.show_reports(request.args)
+        print(reports)
     except (ValueError, KeyError) as e:
         print(e.args[0])
         return make_response(e.args[0]), 400

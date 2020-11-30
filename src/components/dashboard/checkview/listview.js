@@ -2,19 +2,21 @@ import React, { Component } from "react";
 class ListView extends Component{
     constructor(props) {
         super(props);
-        this.state = {
-            count: 0,
-        };
-        this.getTabRows = this.getTabRows.bind(this);
+        this.count = 0;
+        this.getTabRow = this.getTabRow.bind(this);
     };
-    getTabRows(tabRow){
-        this.setState({count: this.state.count+1});
+    getTabRow(tabRow){
+        this.count += 1;
+        const report = (tabRow.status)? <a href={tabRow.report} target="_blank">View</a> : <div></div>;
+        if(tabRow.status){
+
+        }
         return(
-            <tr key={this.state.count}>
-                <th scope="row">{this.state.count}</th>
+            <tr key={this.count}>
+                <th scope="row">{this.count}</th>
                 <td>{tabRow.date}</td>
-                <td>{tabRow.status}</td>
-                <td>{tabRow.report}</td>
+                <td>{(tabRow.status)? "Complete": "InComplete"}</td>
+                <td>{report}</td>
             </tr>
         )
     }
@@ -29,6 +31,7 @@ class ListView extends Component{
                                 <button
                                     type="button"
                                     class="btn btn-falcon-primary float-right"
+                                    onClick={this.props.onBackPress}
                                 >
                                     Back
                                 </button>
@@ -47,7 +50,7 @@ class ListView extends Component{
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.tabRows.map((tabRow) => getTabRow(tabRow))}
+                            {this.props.tabRows? (this.props.tabRows.map((tabRow) => this.getTabRow(tabRow))) : <p>No Reports Found</p>}
                         </tbody>
                     </table>
                 </div>
@@ -55,3 +58,4 @@ class ListView extends Component{
         );
     }
 }
+export default ListView;

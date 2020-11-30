@@ -68,7 +68,7 @@ class CourseView extends Component {
             </div>
           </div>
           <div class="row mr-1">
-            {this.props.courses.map((course) => this.getCard(course))}
+            {this.props.courses? (this.props.courses.map((course) => this.getCard(course))): <h6>&nbsp;&nbsp; No Courses Found</h6>}
           </div>
         </div>
         <CourseModal
