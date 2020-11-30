@@ -1,6 +1,7 @@
 from app import db, scheduler
 from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
+from app.controllers.reports_controller import ReportsController
 from app.utils.csv_parser import parse
 
 class ChecksController:
@@ -44,6 +45,9 @@ class ChecksController:
             directories = check.download_submissions()
             url = check.run_check(check.language, directories)
             check.remove_submissions()
+            # ReportsController.new()
+            print("Run end")
+            print(url)
             return url
         else:
             raise ValueError("Check with id {} is not present.".format(check_id))
