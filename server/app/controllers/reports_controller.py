@@ -4,7 +4,7 @@ from app.models.reports import Report
 class ReportsController:
 
     @staticmethod
-    def new(parameters,file=None):
+    def new(parameters):
         
         report = Report(int(parameters['check_id']), parameters['check_date'], True, parameters['report_link'])
         db.session.add(report)
