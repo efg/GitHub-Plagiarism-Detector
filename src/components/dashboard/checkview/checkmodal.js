@@ -49,6 +49,10 @@ class CheckModal extends Component {
                             <input class="form-control" type="file" name="csvFile" id="csvFile" onChange={this.props.uploadFile} />
                         </div>
                         <div class="form-group">
+                            <label for="pathscsv">CSV file of paths</label>
+                            <input class="form-control" type="file" name="pathscsv" id="pathscsv" onChange={this.props.uploadPathsFile} />
+                        </div>
+                        <div class="form-group">
                             {/* <label for="header">Is header row present?</label> */}
                             <div display="inline">Header row present ?
                                 <input type="checkbox" name="header" style={{"float":"right","marginTop":"2px", "height": "20px", "width": "20px"}} size="4" id="header" onChange={this.props.handleChange} />

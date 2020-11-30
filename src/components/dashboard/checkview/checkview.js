@@ -18,6 +18,7 @@ class CheckView extends Component {
       end_date: "",
       interval: "",
       csvFile: null,
+      pathscsv: null,
       header: "",
       tabView: false,
       tabData: []
@@ -88,6 +89,13 @@ class CheckView extends Component {
     });
   };
 
+  uploadPathsFile = (event) => {
+    this.setState({
+      pathscsv: event.target.files[0],
+      loaded: 0,
+    });
+  };
+
   handleSubmit = async () => {
     const data = new FormData();
     data.append("name", this.state.name);
@@ -97,7 +105,8 @@ class CheckView extends Component {
     data.append("end_date", this.state.end_date);
     data.append("interval", this.state.interval);
     data.append("header", this.state.header);
-    data.append("file", this.state.csvFile);
+    data.append("csvFile", this.state.csvFile);
+    data.append("pathscsv", this.state.pathscsv);
 
     await axios
       .post("http://127.0.0.1:5000/check/new", data)

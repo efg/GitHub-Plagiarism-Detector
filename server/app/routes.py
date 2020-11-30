@@ -5,6 +5,7 @@ from app.controllers.courses_controller import CourseController
 from app.controllers.users_controller import UserController
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.checks_controller import ChecksController
+from app.controllers.paths_controller import PathsController
 from app.controllers.reports_controller import ReportsController
 
 
@@ -103,7 +104,7 @@ def submission_list():
 def check_new():
     try:
         # print(request.form)
-        ChecksController.new(request.form, request.files['file'] )
+        ChecksController.new(request.form, request.files['csvFile'], request.files['pathscsv'] )
     except (ValueError, KeyError) as e:
         print("error",e)
         return make_response(e.args[0]), 400
@@ -158,6 +159,21 @@ def reports_show():
 def report_new():
     try:
         ReportsController.new(request.form)
+    except (ValueError, KeyError) as e:
+        print("error",e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        print(e)
+        return make_response('Server Error'), 500
+    
+    return make_response('Success'), 200
+
+
+# Create new entry in reports table
+@app.route('/path/new', methods=['post'])
+def path_new():
+    try:
+        PathsController.new(request.form, request.files)
     except (ValueError, KeyError) as e:
         print("error",e)
         return make_response(e.args[0]), 400
