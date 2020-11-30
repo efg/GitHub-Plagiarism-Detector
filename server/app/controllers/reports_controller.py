@@ -4,11 +4,12 @@ from app.models.reports import Report
 class ReportsController:
 
     @staticmethod
-    def new(parameters):
+    def new(check_id, check_date, report_link):
         
-        report = Report(int(parameters['check_id']), parameters['check_date'], True, parameters['report_link'])
+        report = Report(check_id, check_date, False, report_link)
         db.session.add(report)
         db.session.commit()
+        return report
 
     def show_reports(parameters):
         check_id = parameters.get('check_id')
