@@ -3,7 +3,6 @@ from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
 from app.utils.csv_parser import parse
 
-
 class ChecksController:
     @staticmethod
     def new(parameters,file=None):
@@ -11,11 +10,12 @@ class ChecksController:
         if not Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first():
             # Create a new entry (record) for checks table and save to db
             
-            # scheduler.add_job(func = ChecksController.test, trigger = "interval", minutes = 1, args = {"check_id" : 1}, next_run_time=datetime.datetime.now())
-            # scheduler.start()
             check = Check(parameters['name'], int(parameters['course_id']), parameters['language'], parameters['start_date'], parameters['end_date'], parameters['interval'], True)
             db.session.add(check)
             db.session.commit()
+            scheduler.add_job(func = ChecksController.run, trigger = "interval", hours = check.interval, args = [check.id], start_date = check.start_date, end_date = check.end_date)
+            # scheduler.add_job(func = ChecksController.run, trigger = "interval", minutes = 1, args = [1])
+
         else: 
             # Raise value error if duplicate check name for this course 
             raise ValueError("Check name '{}' for course {} already exists.".format(parameters['name'], parameters['course_id']))
@@ -23,8 +23,6 @@ class ChecksController:
         curr_check = Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first()
         if curr_check:
             duplicates = SubmissionController.new({'check_id':curr_check.id, 'header':parameters['header']},file)
-        print(duplicates)
-
         
     @staticmethod
     def show_checks(parameters):
@@ -38,13 +36,14 @@ class ChecksController:
 
 
     @staticmethod
-    def run(parameters):
+    def run(check_id):
+        # print(parameters)
         # Download the latest submissions
-        check = Check.query.filter_by(id = parameters["check_id"]).first()
+        check = Check.query.filter_by(id = check_id).first()
         if check:
             directories = check.download_submissions()
             url = check.run_check(check.language, directories)
             check.remove_submissions()
             return url
         else:
-            raise ValueError("Check with id {} is not present.".format(parameters["check_id"]))
+            raise ValueError("Check with id {} is not present.".format(check_id))
