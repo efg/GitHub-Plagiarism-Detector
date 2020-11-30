@@ -104,7 +104,7 @@ def submission_list():
 def check_new():
     try:
         # print(request.form)
-        ChecksController.new(request.form, request.files['csvFile'], request.files['pathscsv'] )
+        ChecksController.new(request.form, request.files )
     except (ValueError, KeyError) as e:
         print("error",e)
         return make_response(e.args[0]), 400

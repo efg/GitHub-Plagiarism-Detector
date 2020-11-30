@@ -6,7 +6,7 @@ class PathsController:
     @staticmethod
     def new(parameters, csv_file):
         print(csv_file)
-        paths = parse(csv_file,parameters['header'])
+        paths = parse(csv_file,parameters['header'])[0]
         for path in paths:
             new_path = Path(parameters['check_id'], path)
             db.session.add(new_path)

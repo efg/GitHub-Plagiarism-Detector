@@ -8,8 +8,12 @@ from datetime import datetime
 
 class ChecksController:
     @staticmethod
-    def new(parameters, submissionsCSV=None, pathsCSV=None):
+    def new(parameters, files=None):
         # See if check name is not duplicate for this course
+        submissionsCSV = files["csvFile"]
+        pathsCSV = files["pathscsv"]
+        print(submissionsCSV,pathsCSV)
+        # return
         if not Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first():
             # Create a new entry (record) for checks table and save to db
             
@@ -26,7 +30,7 @@ class ChecksController:
         curr_check = Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first()
         if curr_check:
             duplicates = SubmissionController.new({'check_id':curr_check.id, 'header':parameters['header']},submissionsCSV)
-        PathsController.new({'check_id': curr_check.id,'header': parameters['header']})
+        PathsController.new({'check_id': curr_check.id,'header': parameters['header']},pathsCSV)
 
         
     @staticmethod

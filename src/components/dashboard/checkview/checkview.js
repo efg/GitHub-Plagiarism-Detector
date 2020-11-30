@@ -26,6 +26,7 @@ class CheckView extends Component {
     this.getCard = this.getCard.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
+    this.uploadPathsFile = this.uploadPathsFile.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getReports = this.getReports.bind(this);
     this.hideTabView = this.hideTabView.bind(this);
@@ -107,6 +108,7 @@ class CheckView extends Component {
     data.append("header", this.state.header);
     data.append("csvFile", this.state.csvFile);
     data.append("pathscsv", this.state.pathscsv);
+    // console.log(data);
 
     await axios
       .post("http://127.0.0.1:5000/check/new", data)
@@ -151,6 +153,7 @@ class CheckView extends Component {
         <CheckModal
           handleChange={this.handleChange}
           uploadFile={this.uploadFile}
+          uploadPathsFile={this.uploadPathsFile}
           handleSubmit={this.handleSubmit}
           languages={this.state.languages}
         />
