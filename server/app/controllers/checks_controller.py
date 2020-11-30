@@ -3,6 +3,7 @@ from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
 from app.utils.csv_parser import parse
+from datetime import datetime
 
 class ChecksController:
     @staticmethod
@@ -15,7 +16,7 @@ class ChecksController:
             db.session.add(check)
             db.session.commit()
             scheduler.add_job(func = ChecksController.run, trigger = "interval", hours = check.interval, args = [check.id], start_date = check.start_date, end_date = check.end_date)
-            # scheduler.add_job(func = ChecksController.run, trigger = "interval", minutes = 1, args = [1])
+            # scheduler.add_job(func = ChecksController.run, trigger = "interval", hours = 1, args = [1], next_run_time=datetime.now())
 
         else: 
             # Raise value error if duplicate check name for this course 
@@ -42,12 +43,17 @@ class ChecksController:
         # Download the latest submissions
         check = Check.query.filter_by(id = check_id).first()
         if check:
+            report = ReportsController.new(check_id, datetime.now(), "")
             directories = check.download_submissions()
             url = check.run_check(check.language, directories)
             check.remove_submissions()
-            # ReportsController.new()
             print("Run end")
             print(url)
+            if len(url) > 0:
+                report.status = True
+                report.report_link += url
+                db.session.add(report)
+                db.session.commit()
             return url
         else:
             raise ValueError("Check with id {} is not present.".format(check_id))
