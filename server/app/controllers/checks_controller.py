@@ -10,10 +10,6 @@ class ChecksController:
     @staticmethod
     def new(parameters, files=None):
         # See if check name is not duplicate for this course
-        submissionsCSV = files["csvFile"]
-        pathsCSV = files["pathscsv"]
-        print(submissionsCSV,pathsCSV)
-        # return
         if not Check.query.filter_by(name=parameters['name'], course_id = parameters['course_id']).first():
             # Create a new entry (record) for checks table and save to db
             
