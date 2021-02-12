@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+/data
 
 # testing
 /coverage
@@ -23,8 +24,6 @@ yarn-debug.log*
 yarn-error.log*
 
 
-.env
-.flaskenv
 *.pyc
 *.pyo
 server/env/

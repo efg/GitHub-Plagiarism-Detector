@@ -1,10 +1,13 @@
-from flask import redirect, url_for
-from app import get_app
-from config import Config
+import time
 
-app = get_app(Config)
+from app import app
+# from config import Config
+
+# app = get_app(Config)
 
 from app import routes
 
 if __name__ == '__main__':
-    app.run()
+    
+    app.debug = True
+    app.run(debug=True)

@@ -57,12 +57,12 @@ class Login extends Component {
                             <div class="card-body p-4 p-sm-5">
                                 <div class="form-group">
                                     {/* <label for="inputEmail" class="text-left">Email address</label> */}
-                                    <input class="form-control" type="email" name="email" id="inputEmail" placeholder="Email address" onChange={this.handleChange} />
+                                    <input class="form-control" type="email" name="email" id="inputEmail" placeholder="Email address" onChange={this.handleChange} required/>
                                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                                 </div>
                                 <div class="form-group">
                                     {/* <label for="inputPassword">Password</label> */}
-                                    <input class="form-control" type="password" name="password" id="inputPassword" placeholder="Password" onChange={this.handleChange} />
+                                    <input class="form-control" type="password" name="password" id="inputPassword" placeholder="Password" onChange={this.handleChange} required/>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary btn-block mt-3" onClick={this.handleSubmit}>Sign in  </button>

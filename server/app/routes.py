@@ -1,5 +1,5 @@
 from flask import request
-from app import get_app
+from app import app
 from app.utils.response import make_response
 from app.controllers.courses_controller import CourseController
 from app.controllers.users_controller import UserController
@@ -9,13 +9,13 @@ from app.controllers.paths_controller import PathsController
 from app.controllers.reports_controller import ReportsController
 
 
-app = get_app()
+# app = get_app()
 
 #Default path
 @app.route('/', methods=['get', 'post'])
 @app.route('/index', methods=['get', 'post'])
 def index():
-    return '<br>&nbspHello World, Flask lives.'
+    return '<br>&nbspHello World, Flask lives here.'
 
 # ----------------Course------------------------
 # Add new course
