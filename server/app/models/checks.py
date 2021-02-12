@@ -1,26 +1,31 @@
 from app import db
 from app.utils.languages import get_file_extensions
 from app.utils.directories import extract_files_from_dir
-import os, git, mosspy, shutil
+import os
+import git
+import mosspy
+import shutil
 from dotenv import load_dotenv
 load_dotenv()
+
 
 class Check(db.Model):
     __tablename__ = 'checks'
 
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey("courses.id", ondelete='CASCADE'), nullable = False)
+    course_id = db.Column(db.Integer, db.ForeignKey(
+        "courses.id", ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(64), nullable=False)
     language = db.Column(db.String(64), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     # Time interval after which to run the check again
     interval = db.Column(db.Integer)
-    is_active = db.Column(db.Boolean, nullable = False)
+    is_active = db.Column(db.Boolean, nullable=False)
     paths = db.relationship('Path', backref='checks', lazy=True)
     submissions = db.relationship('Submission', backref='checks', lazy=True)
 
-    def __init__(self, name, course_id, language, start_date, end_date, interval, is_active = True):
+    def __init__(self, name, course_id, language, start_date, end_date, interval, is_active=True):
         self.name = name
         self.course_id = course_id
         self.language = language
@@ -28,10 +33,11 @@ class Check(db.Model):
         self.end_date = end_date
         self.interval = interval
         self.is_active = is_active
-    
+
     # Returns the check directory path - <course_id>_<db_id>_<check_name>
     def get_check_dir_path(self):
-        files_path = os.path.join(os.path.dirname(os.path.realpath('__file__')), 'app/files/')
+        files_path = os.path.join(os.path.dirname(
+            os.path.realpath('__file__')), 'app/files/')
         check_dir_name = '{}_{}_{}'.format(self.course_id, self.id, self.name)
         check_dir_path = os.path.join(files_path, check_dir_name)
         return check_dir_path
@@ -43,15 +49,17 @@ class Check(db.Model):
         check_dir_path = self.get_check_dir_path()
         # Make a new directory for current check
         os.mkdir(check_dir_path)
-        
+
         # Clone all github repositories and append the clone directory in 'directories' list
         for submission in self.submissions:
-            submission_dir = os.path.join(check_dir_path, '{}_{}'.format(submission.id, submission.name))
+            submission_dir = os.path.join(
+                check_dir_path, '{}_{}'.format(submission.id, submission.name))
             os.mkdir(submission_dir)
-            repo = git.Repo.clone_from(submission.github_url, submission_dir, branch='master')
+            repo = git.Repo.clone_from(
+                submission.github_url, submission_dir, branch='master')
             if repo:
                 directories.append(submission_dir)
-        
+
         return directories
 
     # Removes the check directory along with its sub directories
@@ -69,7 +77,7 @@ class Check(db.Model):
         if directories:
             moss.setDirectoryMode(1)
             file_exts = get_file_extensions(language)
-            
+
             # Move files from subdirectories to parent directories and relevant language files
             for directory in directories:
                 extract_files_from_dir(directory, self.paths)
@@ -79,5 +87,5 @@ class Check(db.Model):
             return
         # Run Check
         url = moss.send()
-        
+
         return url
