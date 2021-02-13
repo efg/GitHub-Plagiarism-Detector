@@ -10,7 +10,7 @@ load_dotenv()
 
 
 class Check(db.Model):
-    __tablename__ = 'checks'
+    __tablename__ =  'checks'
 
     id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey(
