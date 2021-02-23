@@ -19,8 +19,6 @@ def move_to_root_folder(root_path, curr_path):
                 move_to_root_folder(root_path, os.path.join(curr_path, filename))
             else:
                 sys.exit("Should never reach here!")
-        # remove empty folders
-        # if curr_path != root_path:
-        #     os.rmdir(curr_path)
+        
     except (FileExistsError, FileNotFoundError, OSError):
         print("\n>>> Error - File/Dir not exits!")
