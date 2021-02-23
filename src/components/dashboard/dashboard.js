@@ -23,7 +23,8 @@ class Dashboard extends Component {
                 this.setState({ courses: res.data['payload'] })
             })
             .catch((error) => {
-                console.log(error.response.data);
+                if (error && error.response)
+                    console.log(error.response.data);
             });
     }
 

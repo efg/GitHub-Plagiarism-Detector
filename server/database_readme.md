@@ -15,3 +15,29 @@ cd to server
     FLASK_APP = main.py 
     FLASK_ENV = development
 2) create .env
+
+## folders to create 
+- Create files folder in ./server/app 
+
+## for postgresql DB installation
+1 - Get homebrew
+2 - brew update then brew  doctor 
+3 - brew install postgresql 
+
+4- start server using pg_ctl -D /usr/local/var/postgres start
+5 -  psql postgres
+
+create user postgres;
+create database gpd_dev; 
+
+alter user postgres with encrypted password 'admin';
+
+grant all privileges on database gpd_dev to postgres;
+
+get pgadmin tool
+
+to use DB 
+\connect gpd_dev 
+
+To list all Tables use 
+\dt

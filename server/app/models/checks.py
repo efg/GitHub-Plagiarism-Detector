@@ -7,10 +7,10 @@ import mosspy
 import shutil
 from dotenv import load_dotenv
 load_dotenv()
-
+from datetime import datetime
 
 class Check(db.Model):
-    __tablename__ =  'checks'
+    __tablename__ = 'checks'
 
     id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey(
@@ -19,6 +19,8 @@ class Check(db.Model):
     language = db.Column(db.String(64), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
+    #end_date = db.Column(datetime.strptime(db.DateTime, "%Y-%m-%d"), nullable=False)
+    
     # Time interval after which to run the check again
     interval = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable=False)
