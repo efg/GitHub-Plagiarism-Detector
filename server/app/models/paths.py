@@ -2,11 +2,17 @@ from app import db
 
 
 class Path(db.Model):
+    """
+    This is for storing paths which will be extracted from the pathcsv
+    """
     __tablename__ = 'paths'
 
     id = db.Column(db.Integer, primary_key=True)
-    check_id = db.Column(db.Integer, db.ForeignKey(
-        "checks.id", ondelete='CASCADE'), nullable=False)
+    check_id = db.Column(db.Integer,
+                         db.ForeignKey(
+                             "checks.id",
+                             ondelete='CASCADE'),
+                         nullable=False)
     path = db.Column(db.String(256), nullable=False)
 
     def __init__(self, check_id, path):

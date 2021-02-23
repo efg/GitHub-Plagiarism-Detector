@@ -1,3 +1,4 @@
+from datetime import datetime
 from app import db
 from app.utils.languages import get_file_extensions
 from app.utils.directories import extract_files_from_dir
@@ -7,20 +8,22 @@ import mosspy
 import shutil
 from dotenv import load_dotenv
 load_dotenv()
-from datetime import datetime
+
 
 class Check(db.Model):
     __tablename__ = 'checks'
 
-    id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey(
-        "courses.id", ondelete='CASCADE'), nullable=False)
+    id = db.Column(db.Integer,
+                   primary_key=True)
+    course_id = db.Column(db.Integer,
+                          db.ForeignKey("courses.id",
+                                        ondelete='CASCADE'),
+                          nullable=False)
     name = db.Column(db.String(64), nullable=False)
     language = db.Column(db.String(64), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    #end_date = db.Column(datetime.strptime(db.DateTime, "%Y-%m-%d"), nullable=False)
-    
+
     # Time interval after which to run the check again
     interval = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable=False)
@@ -35,6 +38,9 @@ class Check(db.Model):
         self.end_date = end_date
         self.interval = interval
         self.is_active = is_active
+
+    def __repr__(self) -> str:
+        return f"{self.name} {self.course_id} {self.language}"
 
     # Returns the check directory path - <course_id>_<db_id>_<check_name>
     def get_check_dir_path(self):
@@ -61,7 +67,6 @@ class Check(db.Model):
                 submission.github_url, submission_dir, branch='master')
             if repo:
                 directories.append(submission_dir)
-
         return directories
 
     # Removes the check directory along with its sub directories

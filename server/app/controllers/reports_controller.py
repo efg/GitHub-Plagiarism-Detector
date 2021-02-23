@@ -16,5 +16,8 @@ class ReportsController:
         result_list = []
         results = Report.query.filter_by(check_id = check_id)
         for res in results:
-            result_list.append({'date': res.check_date, 'status': res.status, 'report': res.report_link})
+            result_list.append(
+                    {'date': res.check_date, 
+                    'status': res.status, 
+                    'report': res.report_link})
         return result_list
