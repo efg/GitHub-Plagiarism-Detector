@@ -24,20 +24,23 @@ cd to server
 2 - brew update then brew  doctor 
 3 - brew install postgresql 
 
-4- start server using pg_ctl -D /usr/local/var/postgres start
-5 -  psql postgres
+4 - start server using pg_ctl -D /usr/local/var/postgres start
+5 - psql postgres
 
-create user postgres;
-create database gpd_dev; 
+# to create DB 
+- CREATE DATABASE gpd_dev;
+- Dump .pgsql into DB spawar2$ psql gpd_dev < /Users/spawar2/Desktop/GitHub-Plagiarism-Detector/server/db.pgsql
 
-alter user postgres with encrypted password 'admin';
-
-grant all privileges on database gpd_dev to postgres;
-
-get pgadmin tool
-
+## Useful commands
 to use DB 
-\connect gpd_dev 
+\c gpd_dev 
+
+To list all DBS
+\list
 
 To list all Tables use 
 \dt
+
+
+## For server 
+pip3 install -r requirements.txt
