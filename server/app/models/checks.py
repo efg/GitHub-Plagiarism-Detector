@@ -63,6 +63,7 @@ class Check(db.Model):
             submission_dir = os.path.join(
                 check_dir_path, '{}_{}'.format(submission.id, submission.name))
             os.mkdir(submission_dir)
+            print("Cloning URL", submission.github_url)
             repo = git.Repo.clone_from(
                 submission.github_url, submission_dir, branch='master')
             if repo:

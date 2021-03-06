@@ -7,7 +7,7 @@ def extract_files_from_dir(root_dir, sub_dirs):
 
 # Move all files from subdirectories to root directories
 def move_to_root_folder(root_path, curr_path):
-
+    # print("Path: ", curr_path)
     try:
         if not os.path.isdir(curr_path): #dir not exists!
             print("\n>>> Dir not exists!")
