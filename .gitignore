@@ -43,7 +43,7 @@ _mailinglist
 .idea/
 server/docs/_build/
 .vscode
-
+.env
 # Coverage reports
 htmlcov/
 .coverage

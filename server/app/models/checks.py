@@ -72,7 +72,7 @@ class Check(db.Model):
             logger.error(f"\nCloning URL {submission.github_url}")
             try:
                 repo = git.Repo.clone_from(
-                    submission.github_url.strip(), submission_dir, branch='master')
+                    submission.github_url.strip(), submission_dir)
                 if repo:
                     directories.append(submission_dir)
             except (Exception):
@@ -88,6 +88,7 @@ class Check(db.Model):
         shutil.rmtree(check_dir_path, ignore_errors=True)
 
     def run_check(self, language, directories):
+        logger.error("\nInside run_check")
         # Load moss user id from env variables
         moss_user_id = os.getenv('MOSS_USER_ID')
         # Initialize Moss
