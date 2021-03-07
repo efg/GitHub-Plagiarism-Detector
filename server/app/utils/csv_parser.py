@@ -7,7 +7,8 @@ import io
 def parse(csv_file, header):
     entries = []
     stream = io.StringIO(csv_file.stream.read().decode("UTF8"), newline=None)
-    csv_input = csv.reader(stream)
+    csv_input = csv.reader(stream, skipinitialspace=True,
+                           delimiter=',', quoting=csv.QUOTE_NONE)
     # Filter out header row if any
     if header == 'True':
         csv_input = csv_input[1:]

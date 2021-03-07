@@ -1,13 +1,19 @@
-from datetime import datetime
-from app import db
-from app.utils.languages import get_file_extensions
-from app.utils.directories import extract_files_from_dir
+import logging
 import os
+import shutil
+
 import git
 import mosspy
-import shutil
+from app import db
+from app.utils.directories import extract_files_from_dir
+from app.utils.languages import get_file_extensions
 from dotenv import load_dotenv
+
 load_dotenv()
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class Check(db.Model):
@@ -63,11 +69,16 @@ class Check(db.Model):
             submission_dir = os.path.join(
                 check_dir_path, '{}_{}'.format(submission.id, submission.name))
             os.mkdir(submission_dir)
-            print("Cloning URL", submission.github_url)
-            repo = git.Repo.clone_from(
-                submission.github_url, submission_dir, branch='master')
-            if repo:
-                directories.append(submission_dir)
+            logger.error(f"\nCloning URL {submission.github_url}")
+            try:
+                repo = git.Repo.clone_from(
+                    submission.github_url.strip(), submission_dir, branch='master')
+                if repo:
+                    directories.append(submission_dir)
+            except (Exception):
+                logger.exception(">>> Git Error!")
+                logger.debug(f"Unable to clone{submission.github_url}")
+                # sys.exit(0)
         return directories
 
     # Removes the check directory along with its sub directories
