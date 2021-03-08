@@ -41,6 +41,8 @@ To list all DBS
 To list all Tables use 
 \dt
 
+To Empty table 
+truncate [table_name] cascade; #if foreign keys are there
 
 ## For server 
 pip3 install -r requirements.txt

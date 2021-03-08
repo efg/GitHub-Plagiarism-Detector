@@ -65,11 +65,15 @@ class Check(db.Model):
         os.mkdir(check_dir_path)
 
         # Clone all github repositories and append the clone directory in 'directories' list
+        print(f"\n\nIMP -- length of submissions: {len(self.submissions)}")
         for submission in self.submissions:
             submission_dir = os.path.join(
                 check_dir_path, '{}_{}'.format(submission.id, submission.name))
             os.mkdir(submission_dir)
+            if len(submission.github_url) == 0:
+                continue
             logger.error(f"\nCloning URL {submission.github_url}")
+
             try:
                 repo = git.Repo.clone_from(
                     submission.github_url.strip(), submission_dir)

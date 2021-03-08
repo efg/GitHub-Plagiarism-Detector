@@ -1,9 +1,12 @@
 import csv
 import io
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 
 # Parse csv_file and return rows as list of lists
-
-
 def parse(csv_file, header):
     entries = []
     stream = io.StringIO(csv_file.stream.read().decode("UTF8"), newline=None)
@@ -15,4 +18,6 @@ def parse(csv_file, header):
     # Iterate over each row in the csv file
     for row in csv_input:
         entries.append(row)
+    logger.info(f"No of entries in the csv: {len(entries)}")
+    print(f"\nNo of entries in the csv: {len(entries)} {entries}")
     return entries
