@@ -40,6 +40,11 @@ class ChecksController:
             print(">>>> Error..inserting data!")
             return 
 
+        SubmissionController.new({
+            'check_id': curr_check.id,
+            'header': parameters['header']},
+            files)
+            
         scheduler.add_job(
             func=ChecksController.run,
             trigger="interval",
@@ -47,19 +52,16 @@ class ChecksController:
             args=[curr_check.id],
             next_run_time=datetime.now())
 
-        SubmissionController.new({
-            'check_id': curr_check.id,
-            'header': parameters['header']},
-            files)
+        
 
     @staticmethod
     def run(check_id):
         # Download the latest submissions
         check = Check.query.filter_by(id=check_id).first()
-        print("\n\ninside check: ", check)
+        print("\n\nInside check: ", check)
         if check:
             report = ReportsController.new(check_id, datetime.now(), "")
-            directories = check.download_submissions()
+            directories = check.download_submissions(check_id)
             url = check.run_check(check.language, directories)
             # check.remove_submissions()
             print("\n >>> Run end", url)

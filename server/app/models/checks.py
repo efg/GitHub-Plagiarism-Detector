@@ -9,6 +9,8 @@ from app.utils.directories import extract_files_from_dir
 from app.utils.languages import get_file_extensions
 from dotenv import load_dotenv
 
+from app.models.submissions import Submission
+
 load_dotenv()
 
 
@@ -56,9 +58,12 @@ class Check(db.Model):
         check_dir_path = os.path.join(files_path, check_dir_name)
         return check_dir_path
 
+    def get_all_submissions(self, check_id):
+        return Submission.query.filter_by(id=check_id).all()
+
     # Download github repositories and return the downloaded directory list
     # Each check will create its own sub-folder in /app/files and clone all repositories in it
-    def download_submissions(self):
+    def download_submissions(self, check_id):
         directories = []
         check_dir_path = self.get_check_dir_path()
         # Make a new directory for current check
@@ -66,6 +71,7 @@ class Check(db.Model):
 
         # Clone all github repositories and append the clone directory in 'directories' list
         print(f"\n\nIMP -- length of submissions: {len(self.submissions)}")
+        # for submission in self.get_all_submissions(check_id):
         for submission in self.submissions:
             submission_dir = os.path.join(
                 check_dir_path, '{}_{}'.format(submission.id, submission.name))
@@ -83,6 +89,7 @@ class Check(db.Model):
                 logger.exception(">>> Git Error!")
                 logger.debug(f"Unable to clone{submission.github_url}")
                 # sys.exit(0)
+        print(f"\nTotal cloned repos: {len(directories)}")
         return directories
 
     # Removes the check directory along with its sub directories
