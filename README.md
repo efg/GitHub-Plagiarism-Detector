@@ -7,6 +7,7 @@ In this project MOSS software by Standford has been used.
 ### Demo 
 ![demo](./media/GPD.gif)
 
+![demo](./media/GPD2.gif)
 
 ### Tech Stack 
 - Flask
