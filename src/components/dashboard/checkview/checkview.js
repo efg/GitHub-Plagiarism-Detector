@@ -21,7 +21,7 @@ class CheckView extends Component {
       pathscsv: null,
       header: "",
       tabView: false,
-      tabData: []
+      tabData: [],
     };
     this.getCard = this.getCard.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -29,6 +29,7 @@ class CheckView extends Component {
     this.uploadPathsFile = this.uploadPathsFile.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getReports = this.getReports.bind(this);
+    this.removeCheck = this.removeCheck.bind(this);
     this.hideTabView = this.hideTabView.bind(this);
     for (var i in languages) this.state.languages.push(i);
   }
@@ -37,34 +38,53 @@ class CheckView extends Component {
     return (
       <Card
         key={check.id}
-        id={check.id} 
+        id={check.id}
+        course_id={this.props.courseId}
         name={check.name}
         infoAttr="Start Date"
         infoVal={check.start_date}
         attr="Language:"
         attrVal={check.language}
         onViewPress={this.getReports}
+        onDeletePress={this.removeCheck}
       />
     );
   }
 
-  async getReports(check_id){
+  async getReports(check_id) {
     console.log(check_id);
-    await axios.get('http://127.0.0.1:5000/report/list?check_id=' + check_id)
-        .then(res => {
-            console.log(res.data['payload']);
-            this.setState({tabView: true, tabData: res.data['payload']});
-            // Report data (payload) is in format: date: "Sun, 01 Nov 2020 19:10:25 GMT" report: "www.mosslink.com" status: true
-            // console.log(res.data['payload']);
-        })
+    await axios
+      .get("http://127.0.0.1:5000/report/list?check_id=" + check_id)
+      .then((res) => {
+        console.log(res.data["payload"]);
+        this.setState({ tabView: true, tabData: res.data["payload"] });
+        // Report data (payload) is in format: date: "Sun, 01 Nov 2020 19:10:25 GMT" report: "www.mosslink.com" status: true
+        // console.log(res.data['payload']);
+      })
       .catch((error) => {
-            console.log(error['message']);
-        });
-
+        console.log(error["message"]);
+      });
   }
 
-  hideTabView(){
-    this.setState({tabView: false, tabData: []});
+  async removeCheck(check_id, course_id) {
+    await axios
+      .get(
+        "http://127.0.0.1:5000/check/delete?check_id=" +
+          check_id +
+          "&course_id=" +
+          course_id
+      )
+      .then((res) => {
+        console.log("response from check delete =>", res.data["payload"]);
+        this.setState({ tabView: false, checks: [...res.data["payload"]] });
+      })
+      .catch((error) => {
+        console.log(error["message"]);
+      });
+  }
+
+  hideTabView() {
+    this.setState({ tabView: false, tabData: [] });
   }
 
   handleChange = (event) => {
@@ -75,9 +95,9 @@ class CheckView extends Component {
       [name]: value,
     });
     if (document.getElementById("header").checked) {
-      this.setState({header: "True"});
+      this.setState({ header: "True" });
     } else {
-      this.setState({header: "False"});  
+      this.setState({ header: "False" });
     }
     // this.state.csvFile = event.target.files[0];
     console.log(this.state);
@@ -121,10 +141,10 @@ class CheckView extends Component {
   };
 
   render() {
-    if(this.state.tabView){
-      return(
+    if (this.state.tabView) {
+      return (
         <ListView tabRows={this.state.tabData} onBackPress={this.hideTabView} />
-      )
+      );
     }
     return (
       <div>
@@ -147,9 +167,16 @@ class CheckView extends Component {
             </div>
           </div>
           <div class="row mr-1">
-            {this.props.checks? (this.props.checks.map((check) => this.getCard(check))) : <p class="fancy-font">No Checks Found</p>}
+            {this.props.checks ? (
+              this.props.checks.map((check) => this.getCard(check))
+            ) : (
+              <div class="container">
+                <p class="fancy-font">No Checks Found</p>
+              </div>
+            )}
           </div>
         </div>
+
         <CheckModal
           handleChange={this.handleChange}
           uploadFile={this.uploadFile}

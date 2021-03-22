@@ -54,20 +54,20 @@ class CourseView extends Component {
   render() {
     return (
       <div>
-        <div class="container">
-          <div class="card overflow-hidden mb-3">
-            <div class="card-body p-2">
-              <div class="row justify-content-between align-items-center pd">
-                <div class="col">Courses</div>
-                <div class="col">
-                    <button type="button" class="btn btn-falcon-primary float-right" data-toggle="modal" data-target="#exampleModal">
+        <div className="container">
+          <div className="card overflow-hidden mb-3">
+            <div className="card-body p-2">
+              <div className="row justify-content-between align-items-center pd">
+                <div className="col">Courses</div>
+                <div className="col">
+                    <button type="button" className="btn btn-falcon-primary float-right" data-toggle="modal" data-target="#exampleModal">
                         New Course
                     </button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row mr-1">
+          <div className="row mr-1">
             {this.props.courses? (this.props.courses.map((course) => this.getCard(course))): <h6>&nbsp;&nbsp; No Courses Found</h6>}
           </div>
         </div>

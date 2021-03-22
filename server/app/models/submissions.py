@@ -17,7 +17,7 @@ class Submission(db.Model):
 
     # Name of the team/student who has made the submission
     name = db.Column(db.String(64), nullable=False)
-    github_url = db.Column(db.String(128), nullable=False)
+    github_url = db.Column(db.String(256), nullable=False)
 
     def __init__(self, name, check_id, github_url):
         self.name = name
