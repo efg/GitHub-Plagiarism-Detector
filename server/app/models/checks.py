@@ -35,10 +35,19 @@ class Check(db.Model):
     # Time interval after which to run the check again
     interval = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable=False)
+    visibility = db.Column(db.String(10), nullable=False)
+    
     paths = db.relationship('Path', backref='checks', lazy=True)
     submissions = db.relationship('Submission', backref='checks', lazy=True)
 
-    def __init__(self, name, course_id, language, start_date, end_date, interval, is_active=True):
+    def __init__(self, name, 
+                course_id, 
+                language, 
+                start_date, 
+                end_date, 
+                interval, 
+                is_active=True,
+                visibility="yes"):
         self.name = name
         self.course_id = course_id
         self.language = language
@@ -46,6 +55,7 @@ class Check(db.Model):
         self.end_date = end_date
         self.interval = interval
         self.is_active = is_active
+        self.visibility = visibility
 
     def __repr__(self) -> str:
         return f"{self.name} {self.course_id} {self.language}"

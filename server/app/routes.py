@@ -139,6 +139,19 @@ def check_run():
     
     return make_response('Success', url), 200
 
+# Delete the check with given id 
+@app.route('/check/delete', methods=['get'])
+def delete_check():
+    print(request.args)
+    try:
+        list_checks = ChecksController.delete_check(request.args)
+        print("from delete_check", list_checks)
+    except (ValueError, KeyError) as e:
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+    
+    return make_response('Success', list_checks), 200
 # ----------------------Reports------------------------
 # Get reports for a check id
 @app.route('/report/list', methods=['get'])

@@ -31,8 +31,10 @@ class Dashboard extends Component {
     async getChecks(course_id) {
         await axios.get('http://127.0.0.1:5000/check/list?course_id=' + course_id)
             .then(res => {
-                this.setState({ selectedCourse: course_id, displayChecks: true, checks: res.data['payload'] });
-                // console.log(res.data['payload']);
+                this.setState({ 
+                    selectedCourse: course_id, 
+                    displayChecks: true, 
+                    checks: res.data['payload'] });
             })
             .catch((error) => {
                 console.log(error['message']);
@@ -40,16 +42,22 @@ class Dashboard extends Component {
     };
 
     getDisplayComponent() {
+        console.log(this.state);
         if (this.state.displayChecks)
-            return <CheckView courseId={this.state.selectedCourse} getChecks={this.getChecks} checks={this.state.checks} />;
-        return <CourseView courses={this.state.courses} getChecks={this.getChecks} />
+            return <CheckView 
+                        courseId={this.state.selectedCourse} 
+                        getChecks={this.getChecks} 
+                        checks={this.state.checks} />;
+        return <CourseView 
+                    courses={this.state.courses} 
+                    getChecks={this.getChecks} />
     }
     render() {
         let secondComponent = this.getDisplayComponent();
         return (
             <div>
                 <Navbar onLogOut={this.props.onLogOut} />
-                <div class="container">
+                <div className="container">
                     {secondComponent}
                 </div>
             </div>
