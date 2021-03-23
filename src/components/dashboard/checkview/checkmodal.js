@@ -96,7 +96,7 @@ class CheckModal extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="csvFile">CSV file of submissions</label>
+                <label htmlFor="csvFile">CSV file of repository</label>
                 <input
                   className="form-control"
                   type="file"
@@ -106,7 +106,7 @@ class CheckModal extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="pathscsv">CSV file of paths</label>
+                <label htmlFor="pathscsv">CSV file of file paths</label>
                 <input
                   className="form-control"
                   type="file"
