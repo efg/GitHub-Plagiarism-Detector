@@ -3,6 +3,8 @@ from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
 from app.utils.csv_parser import parse
+from app.utils.scrape import extract_info
+
 from datetime import datetime
 
 
@@ -67,6 +69,11 @@ class ChecksController:
                 report.report_link += url
                 db.session.add(report)
                 db.session.commit()
+
+                #pass this url for scraping and print result 
+                MOSS_info = extract_info(url)
+                print(MOSS_info)
+
             else:
                 raise ValueError("\nError >>> No URL\n")
             return url
