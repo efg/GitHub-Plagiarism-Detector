@@ -7,15 +7,17 @@ class ListView extends Component {
   }
   getTabRow(tabRow) {
     this.count += 1;
-    const report = tabRow.status && tabRow.report.includes('/') ? (
-      <a href={tabRow.report} target="_blank">
-        View
-      </a>
-    ) : (
-      <div>Error</div>
-    );
-    if (tabRow.status) {
-    }
+    const report =
+      tabRow.status && tabRow.report.includes("/") ? (
+        <a href={tabRow.report} target="_blank">
+          View
+        </a>
+      ) : !tabRow.status ? (
+        <div>Run Failed</div>
+      ) : (
+        <div></div>
+      );
+
     return (
       <tr key={this.count}>
         <th scope="row">{this.count}</th>

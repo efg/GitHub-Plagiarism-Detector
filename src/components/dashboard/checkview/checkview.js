@@ -76,7 +76,11 @@ class CheckView extends Component {
       )
       .then((res) => {
         console.log("response from check delete =>", res.data["payload"]);
-        this.setState({ tabView: false, checks: [...res.data["payload"]] });
+        this.setState({
+          selectedCourse: course_id,
+          displayChecks: true,
+          checks: res.data["payload"]
+        });
       })
       .catch((error) => {
         console.log(error["message"]);

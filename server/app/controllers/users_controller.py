@@ -23,7 +23,6 @@ class UserController:
     @staticmethod
     def login(parameters):
         user = User.query.filter_by(email=parameters['email']).first()
-        print("->", user)
         if not user:
             raise ValueError("User with email '{}' doesn't exists".format(parameters['email']))
         elif not  user.password == parameters['password']:
