@@ -2,8 +2,7 @@ from app import db, scheduler
 from app.models.checks import Check
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
-from app.utils.csv_parser import parse
-from app.utils.scrape import extract_info
+from app.utils.scrape import scrape_MOSS_report
 
 from datetime import datetime
 
@@ -63,7 +62,7 @@ class ChecksController:
             directories = check.download_submissions(check_id)
             url = check.run_check(check.language, directories)
             # check.remove_submissions()
-            print("\n >>> Run end", url)
+            print("\n\n >>> Run end", url, "\n", type(url))
             if url and len(url) > 0:
                 report.status = True
                 report.report_link += url
@@ -71,8 +70,11 @@ class ChecksController:
                 db.session.commit()
 
                 #pass this url for scraping and print result 
-                MOSS_info = extract_info(url)
-                print(MOSS_info)
+                try:
+                    MOSS_info = scrape_MOSS_report(str(url)) #get info by scrpaing the MOSS report
+                    print(MOSS_info)
+                except Exception as e:
+                    print("\n\nScraping failed due to ", e)
 
             else:
                 raise ValueError("\nError >>> No URL\n")
@@ -89,13 +91,11 @@ class ChecksController:
         # Fetch checks corresponding to given course ID
         checks = Check.query.filter_by(course_id=course_id,
                                        visibility="yes")
-        print("\n inside show checks", parameters)
         for check in checks:
             checks_list.append({'id': check.id,
                                 'name': check.name,
                                 'language': check.language,
                                 'start_date': check.start_date.date()})
-        print(checks_list)
         return checks_list
 
     @staticmethod

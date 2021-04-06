@@ -37,7 +37,7 @@ def scrape_MOSS_report(URL: str) -> list:
         for i in range(0, n, 2):  # pick couple of links
             first, second = links[i], links[i + 1]
             # [(('t1', 69), ('t2', 22))]
-            list_tname_similarity += [(extract_info(first),
-                                       extract_info(second))]
+            list_tname_similarity += [(extract_info(first.getText()),
+                                       extract_info(second.getText()))]
 
     return list_tname_similarity
