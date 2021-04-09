@@ -1,8 +1,13 @@
 from app import db, scheduler
 from app.models.checks import Check
+from app.models.reports import Report
+
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
-from app.utils.csv_parser import parse
+from app.controllers.scrape_controller import ScrapeController
+
+from app.utils.scrape import scrape_MOSS_report
+
 from datetime import datetime
 
 
@@ -55,18 +60,35 @@ class ChecksController:
     def run(check_id):
         # Download the latest submissions
         check = Check.query.filter_by(id=check_id).first()
-        print("\n\nInside check run:  ")
+        print("\n\nInside check run:  ", check_id)
         if check:
             report = ReportsController.new(check_id, datetime.now(), "")
             directories = check.download_submissions(check_id)
             url = check.run_check(check.language, directories)
             # check.remove_submissions()
-            print("\n >>> Run end", url)
+            # url = "http://moss.stanford.edu/results/0/8842422701801"  # TODO: remove this line
+            print("\n\n >>> Run end", url)
+
             if url and len(url) > 0:
                 report.status = True
                 report.report_link += url
                 db.session.add(report)
                 db.session.commit()
+
+                # pass this url for scraping and print result
+                try:
+                    # get info by scrpaing the MOSS report
+                    MOSS_info = scrape_MOSS_report(url)
+                    print(MOSS_info)
+                    reports = Report.query.filter_by(check_id=check_id).all()
+                    if reports:
+                        ScrapeController.new(
+                            check.id, reports[-1].id, MOSS_info)
+                    else:
+                        raise ValueError("Report does not exists!")
+                except Exception as e:
+                    print("\n\nScraping failed due to ", e)
+
             else:
                 raise ValueError("\nError >>> No URL\n")
             return url
@@ -76,19 +98,17 @@ class ChecksController:
 
     @staticmethod
     def show_checks(parameters):
-        
+
         course_id = parameters.get('course_id')
         checks_list = []
         # Fetch checks corresponding to given course ID
         checks = Check.query.filter_by(course_id=course_id,
                                        visibility="yes")
-        print("\n inside show checks", parameters)
         for check in checks:
             checks_list.append({'id': check.id,
                                 'name': check.name,
                                 'language': check.language,
                                 'start_date': check.start_date.date()})
-        print(checks_list)
         return checks_list
 
     @staticmethod
@@ -98,7 +118,7 @@ class ChecksController:
         course_id = parameters.get('course_id')
         # Mark the check as not visible
         check = Check.query.filter_by(id=check_id,
-                                        visibility="yes").first()
+                                      visibility="yes").first()
         print("\n->", check)
         if check:
             check.visibility = "no"
