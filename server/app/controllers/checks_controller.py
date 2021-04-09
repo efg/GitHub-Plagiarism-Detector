@@ -4,7 +4,7 @@ from app.models.reports import Report
 
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
-from app.controllers.scrape_controller import ScrapeController
+from app.controllers.similarities_controller import SimilaritiesController
 
 from app.utils.scrape import scrape_MOSS_report
 
@@ -18,7 +18,6 @@ class ChecksController:
         if not Check.query.filter_by(name=parameters['name'],
                                      course_id=parameters['course_id']).first():
             # Create a new entry (record) for checks table and save to db
-
             check = Check(parameters['name'],
                           int(parameters['course_id']),
                           parameters['language'],
@@ -30,7 +29,6 @@ class ChecksController:
             db.session.add(check)
             db.session.commit()
             # scheduler.add_job(func = ChecksController.run, trigger = "interval", hours = check.interval, args = [check.id], start_date = check.start_date, end_date = check.end_date)
-            # scheduler.add_job(func = ChecksController.run, trigger = "interval", hours = 1, args = [1], next_run_time=datetime.now())
 
         else:
             # Raise value error if duplicate check name for this course
@@ -82,7 +80,7 @@ class ChecksController:
                     print(MOSS_info)
                     reports = Report.query.filter_by(check_id=check_id).all()
                     if reports:
-                        ScrapeController.new(
+                        SimilaritiesController.new(
                             check.id, reports[-1].id, MOSS_info)
                     else:
                         raise ValueError("Report does not exists!")

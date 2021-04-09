@@ -20,20 +20,20 @@ class Similarities(db.Model):
                              ondelete='CASCADE'),
                          nullable=False)
 
-    first = db.Column(db.String(100), nullable=False)
-    first_match_score = db.Column(db.Float, nullable=False)
+    repo1 = db.Column(db.String(100), nullable=False)
+    dupl_code1 = db.Column(db.Float, nullable=False)
     
-    second = db.Column(db.String(100), nullable=False)
-    second_match_score = db.Column(db.Float, nullable=False)
+    repo2 = db.Column(db.String(100), nullable=False)
+    dupl_code2 = db.Column(db.Float, nullable=False)
         
     
 
-    def __init__(self, check_id, report_id, first, first_match_score, second, second_match_score):
+    def __init__(self, check_id, report_id, repo1, dupl_code1, repo2, dupl_code2):
         self.check_id = check_id
         self.report_id = report_id
-        self.first = first
-        self.first_match_score = first_match_score
-        self.second = second
-        self.second_match_score = second_match_score
+        self.repo1 = repo1
+        self.dupl_code1 = dupl_code1
+        self.repo2 = repo2
+        self.dupl_code2 = dupl_code2
         
         

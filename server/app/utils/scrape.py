@@ -8,7 +8,6 @@ def extract_info(text: str) -> tuple:
     """return team name and code similarty """
     if not text:
         raise ValueError('Empty link name')
-    print(text)
     text_split = re.split(r'/', text)
     if len(text_split) < 2:
         raise ValueError('Inefficient link length')
