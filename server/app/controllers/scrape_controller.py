@@ -13,9 +13,9 @@ class ScrapeController:
                 report_id=report_id,
                 first=team1,
                 second=team2).first():
-                similar = Similarities(report_id, report_id, team1, score1, team2, score2)  
+                similar = Similarities(check_id, report_id, team1, score1, team2, score2)  
                 db.session.add(similar)
                 db.session.commit()
-                print("\ninside Scrapecontroller", "data added")
             else:
                 print(f"\n{team1}, {team2}  data exists!")
+        print("\nInside ScrapeController data added")

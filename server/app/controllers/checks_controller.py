@@ -60,13 +60,13 @@ class ChecksController:
     def run(check_id):
         # Download the latest submissions
         check = Check.query.filter_by(id=check_id).first()
-        print("\n\nInside check run:  ")
+        print("\n\nInside check run:  ", check_id)
         if check:
             report = ReportsController.new(check_id, datetime.now(), "")
-            # directories = check.download_submissions(check_id)
-            # url = check.run_check(check.language, directories)
-            check.remove_submissions()
-            url = "http://moss.stanford.edu/results/0/8842422701801"  # TODO: remove this line
+            directories = check.download_submissions(check_id)
+            url = check.run_check(check.language, directories)
+            # check.remove_submissions()
+            # url = "http://moss.stanford.edu/results/0/8842422701801"  # TODO: remove this line
             print("\n\n >>> Run end", url)
 
             if url and len(url) > 0:
@@ -81,10 +81,9 @@ class ChecksController:
                     MOSS_info = scrape_MOSS_report(url)
                     print(MOSS_info)
                     reports = Report.query.filter_by(check_id=check_id).all()
-                    print(reports)
                     if reports:
                         ScrapeController.new(
-                            check_id, reports[-1].id, MOSS_info)
+                            check.id, reports[-1].id, MOSS_info)
                     else:
                         raise ValueError("Report does not exists!")
                 except Exception as e:
