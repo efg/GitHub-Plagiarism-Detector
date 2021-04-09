@@ -8,12 +8,13 @@ def extract_info(text: str) -> tuple:
     """return team name and code similarty """
     if not text:
         raise ValueError('Empty link name')
+    print(text)
     text_split = re.split(r'/', text)
     if len(text_split) < 2:
         raise ValueError('Inefficient link length')
     tname = re.split('_', text_split[-2])[1]
-    similarity = re.split(r"[()]", text_split[-1])[1]
-    return (tname, similarity)
+    similarity = re.split(r"[(%)]", text_split[-1])[1]
+    return (tname, float(similarity))
 
 
 def scrape_MOSS_report(URL: str) -> list:

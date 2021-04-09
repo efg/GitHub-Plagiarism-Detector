@@ -13,14 +13,13 @@ class Similarities(db.Model):
                          db.ForeignKey(
                              "checks.id",
                              ondelete='CASCADE'),
-                         nullable=False),
+                         nullable=False)
     report_id = db.Column(db.Integer,
                          db.ForeignKey(
                              "reports.id",
                              ondelete='CASCADE'),
-                         nullable=False),
-    
-    
+                         nullable=False)
+
     first = db.Column(db.String(100), nullable=False)
     first_match_score = db.Column(db.Float, nullable=False)
     
@@ -31,10 +30,10 @@ class Similarities(db.Model):
 
     def __init__(self, check_id, report_id, first, first_match_score, second, second_match_score):
         self.check_id = check_id
-        self.report_id = report_id,
-        self.first = first,
-        self.first_match_score = first_match_score,
-        self.second = second,
-        self.second_match_score = second_match_score,
+        self.report_id = report_id
+        self.first = first
+        self.first_match_score = first_match_score
+        self.second = second
+        self.second_match_score = second_match_score
         
         

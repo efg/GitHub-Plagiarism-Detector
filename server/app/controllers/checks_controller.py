@@ -1,7 +1,11 @@
 from app import db, scheduler
 from app.models.checks import Check
+from app.models.reports import Report
+
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
+from app.controllers.scrape_controller import ScrapeController
+
 from app.utils.scrape import scrape_MOSS_report
 
 from datetime import datetime
@@ -59,20 +63,30 @@ class ChecksController:
         print("\n\nInside check run:  ")
         if check:
             report = ReportsController.new(check_id, datetime.now(), "")
-            directories = check.download_submissions(check_id)
-            url = check.run_check(check.language, directories)
-            # check.remove_submissions()
-            print("\n\n >>> Run end", url, "\n", type(url))
+            # directories = check.download_submissions(check_id)
+            # url = check.run_check(check.language, directories)
+            check.remove_submissions()
+            url = "http://moss.stanford.edu/results/0/8842422701801"  # TODO: remove this line
+            print("\n\n >>> Run end", url)
+
             if url and len(url) > 0:
                 report.status = True
                 report.report_link += url
                 db.session.add(report)
                 db.session.commit()
 
-                #pass this url for scraping and print result 
+                # pass this url for scraping and print result
                 try:
-                    MOSS_info = scrape_MOSS_report(str(url)) #get info by scrpaing the MOSS report
+                    # get info by scrpaing the MOSS report
+                    MOSS_info = scrape_MOSS_report(url)
                     print(MOSS_info)
+                    reports = Report.query.filter_by(check_id=check_id).all()
+                    print(reports)
+                    if reports:
+                        ScrapeController.new(
+                            check_id, reports[-1].id, MOSS_info)
+                    else:
+                        raise ValueError("Report does not exists!")
                 except Exception as e:
                     print("\n\nScraping failed due to ", e)
 
@@ -85,7 +99,7 @@ class ChecksController:
 
     @staticmethod
     def show_checks(parameters):
-        
+
         course_id = parameters.get('course_id')
         checks_list = []
         # Fetch checks corresponding to given course ID
@@ -105,7 +119,7 @@ class ChecksController:
         course_id = parameters.get('course_id')
         # Mark the check as not visible
         check = Check.query.filter_by(id=check_id,
-                                        visibility="yes").first()
+                                      visibility="yes").first()
         print("\n->", check)
         if check:
             check.visibility = "no"
