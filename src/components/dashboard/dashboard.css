@@ -10,3 +10,8 @@
     font-family: "Helvetica";
     text-align: center;
 }
+
+.stats-view{
+    display: flex;
+    flex-direction: column;
+}

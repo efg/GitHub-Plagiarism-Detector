@@ -8,9 +8,10 @@ import ListView from "./listview";
 class CheckView extends Component {
   constructor(props) {
     super(props);
-    // let result = [];
+
     this.state = {
       name: "",
+      check_id: -1,
       course_id: this.props.courseId,
       language: "",
       languages: [],
@@ -22,7 +23,9 @@ class CheckView extends Component {
       header: "",
       tabView: false,
       tabData: [],
+    //   moss_info: [],
     };
+
     this.getCard = this.getCard.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
@@ -31,6 +34,7 @@ class CheckView extends Component {
     this.getReports = this.getReports.bind(this);
     this.removeCheck = this.removeCheck.bind(this);
     this.hideTabView = this.hideTabView.bind(this);
+    // this.get_MOSS_info = this.get_MOSS_info.bind(this);
     for (var i in languages) this.state.languages.push(i);
   }
 
@@ -57,9 +61,11 @@ class CheckView extends Component {
       .get("http://127.0.0.1:5000/report/list?check_id=" + check_id)
       .then((res) => {
         console.log(res.data["payload"]);
-        this.setState({ tabView: true, tabData: res.data["payload"] });
-        // Report data (payload) is in format: date: "Sun, 01 Nov 2020 19:10:25 GMT" report: "www.mosslink.com" status: true
-        // console.log(res.data['payload']);
+        this.setState({
+          check_id: check_id,
+          tabView: true,
+          tabData: res.data["payload"],
+        });
       })
       .catch((error) => {
         console.log(error["message"]);
@@ -79,13 +85,14 @@ class CheckView extends Component {
         this.setState({
           selectedCourse: course_id,
           displayChecks: true,
-          checks: res.data["payload"]
+          checks: res.data["payload"],
         });
       })
       .catch((error) => {
         console.log(error["message"]);
       });
   }
+  
 
   hideTabView() {
     this.setState({ tabView: false, tabData: [] });
@@ -147,7 +154,12 @@ class CheckView extends Component {
   render() {
     if (this.state.tabView) {
       return (
-        <ListView tabRows={this.state.tabData} onBackPress={this.hideTabView} />
+        <ListView
+          check_id={this.state.check_id}
+          tabRows={this.state.tabData}
+          onBackPress={this.hideTabView}
+        //   get_MOSS_info={this.get_MOSS_info}
+        />
       );
     }
     return (
