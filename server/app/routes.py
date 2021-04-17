@@ -7,11 +7,14 @@ from app.controllers.submissions_controller import SubmissionController
 from app.controllers.checks_controller import ChecksController
 from app.controllers.paths_controller import PathsController
 from app.controllers.reports_controller import ReportsController
+from app.controllers.similarities_controller import SimilaritiesController
 
 
 app = get_app()
 
-#Default path
+# Default path
+
+
 @app.route('/', methods=['get', 'post'])
 @app.route('/index', methods=['get', 'post'])
 def index():
@@ -19,6 +22,8 @@ def index():
 
 # ----------------Course------------------------
 # Add new course
+
+
 @app.route('/course/new', methods=['post'])
 def course_new():
     try:
@@ -32,6 +37,8 @@ def course_new():
     return make_response('Success'), 200
 
 # List course names for a user
+
+
 @app.route('/course/list', methods=['get'])
 def course_show():
     try:
@@ -54,10 +61,12 @@ def user_new():
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
-    
+
     return make_response('Success'), 200
 
 # Login
+
+
 @app.route('/user/login', methods=['post'])
 def user_login():
     try:
@@ -67,34 +76,38 @@ def user_login():
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
-    
-    return make_response('Success',user_data), 200
+
+    return make_response('Success', user_data), 200
 
 
 # ----------------Submissions------------------------
-#Add a new list of submissions
-#duplicate entries will not be added and will be returned to the caller in a form of list
+# Add a new list of submissions
+# duplicate entries will not be added and will be returned to the caller in a form of list
 @app.route('/submission/new', methods=['post'])
 def submission_new():
     try:
-        duplicate_entries = SubmissionController.new(request.form, request.files)
+        duplicate_entries = SubmissionController.new(
+            request.form, request.files)
     except (ValueError, KeyError) as e:
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
-    
+
     return make_response('Success', duplicate_entries), 200
-    
+
 # Get all the submssions according to provided check_id
+
+
 @app.route('/submission/list', methods=['get'])
 def submission_list():
     try:
-        list_of_submissions = SubmissionController.list_submissions(request.values)
+        list_of_submissions = SubmissionController.list_submissions(
+            request.values)
     except (ValueError, KeyError) as e:
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
-    
+
     return make_response('Success', list_of_submissions), 200
 
 
@@ -104,17 +117,19 @@ def submission_list():
 def check_new():
     try:
         # print(request.form)
-        ChecksController.new(request.form, request.files )
+        ChecksController.new(request.form, request.files)
     except (ValueError, KeyError) as e:
-        print("error",e)
+        print("error", e)
         return make_response(e.args[0]), 400
     except Exception as e:
         print(e)
         return make_response('Server Error'), 500
-    
+
     return make_response('Success'), 200
 
 # List checks for a course
+
+
 @app.route('/check/list', methods=['get'])
 def checks_show():
     try:
@@ -128,6 +143,8 @@ def checks_show():
     return make_response('Success', checks), 200
 
 # Run the check with given check_id
+
+
 @app.route('/check/run', methods=['post'])
 def check_run():
     try:
@@ -136,10 +153,12 @@ def check_run():
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
-    
+
     return make_response('Success', url), 200
 
-# Delete the check with given id 
+# Delete the check with given id
+
+
 @app.route('/check/delete', methods=['get'])
 def delete_check():
     print(request.args)
@@ -150,10 +169,12 @@ def delete_check():
         return make_response(e.args[0]), 400
     except Exception as e:
         return make_response('Server Error'), 500
-    
+
     return make_response('Success', list_checks), 200
 # ----------------------Reports------------------------
 # Get reports for a check id
+
+
 @app.route('/report/list', methods=['get'])
 def reports_show():
     try:
@@ -168,17 +189,19 @@ def reports_show():
     return make_response('Success', reports), 200
 
 # Create new entry in reports table
+
+
 @app.route('/report/new', methods=['post'])
 def report_new():
     try:
         ReportsController.new(request.form)
     except (ValueError, KeyError) as e:
-        print("error",e)
+        print("error", e)
         return make_response(e.args[0]), 400
     except Exception as e:
         print(e)
         return make_response('Server Error'), 500
-    
+
     return make_response('Success'), 200
 
 
@@ -188,10 +211,25 @@ def path_new():
     try:
         PathsController.new(request.form, request.files)
     except (ValueError, KeyError) as e:
-        print("error",e)
+        print("error", e)
         return make_response(e.args[0]), 400
     except Exception as e:
         print(e)
         return make_response('Server Error'), 500
-    
+
     return make_response('Success'), 200
+
+# ----------------------Similarities (MOSS info)------------------------
+
+
+@app.route('/check/similarities', methods=['get'])
+def fetch_all_report_infos():
+    try:
+        MOSS_info = SimilaritiesController.fetch_all_report_infos(request.args)
+        # print(MOSS_info)
+
+    except Exception as e:
+        print(e)
+        return make_response('Server Error'), 500
+
+    return make_response('suceess', MOSS_info), 200
