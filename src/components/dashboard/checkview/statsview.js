@@ -67,9 +67,9 @@ class StatsView extends Component {
                             <tr>
                                 <th>Report ID</th>
                                 <th>Team 1</th>
-                                <th>Similarity</th>
+                                <th>Shared code %</th>
                                 <th>Team 2</th>
-                                <th>Similarity 2</th>
+                                <th>Shared code %</th>
                             </tr>
                         </thead>
                         <tbody>
