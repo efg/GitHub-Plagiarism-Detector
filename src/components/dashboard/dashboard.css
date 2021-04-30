@@ -3,7 +3,6 @@
     padding-right: 1.0rem;
 }
 .card-text-muted{
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-weight: lighter;
 }
 .fancy-font{
@@ -22,3 +21,8 @@
 .table td, .table th{
     padding: 0.3rem
 }
+
+
+/* .container > div {
+    border: 1px solid orange;
+} */

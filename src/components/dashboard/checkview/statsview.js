@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
+import Heading from "../heading/heading";
 
 class StatsView extends Component {
   constructor(props) {
@@ -13,8 +14,6 @@ class StatsView extends Component {
   }
 
   get_MOSS_info(check_id) {
-    // console.log("inside get MOSS", check_id);
-
     axios
       .get(`/check/similarities?check_id=${check_id}`)
       .then((res) => {
@@ -89,12 +88,24 @@ class StatsView extends Component {
     if (this.props.loading) {
       return <div>Loading...</div>;
     }
+    if (!this.state.moss_info){
+      return (
+        <div>No MOSS info found!</div>
+      )
+    }
     return (
       <>
         <div id="stats-view" className="container">
-          <div>
-            <strong>Statistics</strong>
-          </div>
+          <Heading
+            title={"Statistics"}
+            value={""}
+            isBack={true}
+            onBackPress={this.props.onBackPress}
+          />
+          {/* <div
+            style={{margin: "1rem"}}>
+            <h4><strong>Statistics</strong></h4>
+          </div> */}
 
           <div className="row justify-content-md-center">
             <div className="col-2">
@@ -103,8 +114,12 @@ class StatsView extends Component {
               </label>
               <div style={{ flexDirection: "column" }} className="row">
                 <div className="row">
-                  <div className="col">Team</div>
-                  <div className="col">Report#</div>
+                  <div style={{ color: "#5f6368" }} className="col">
+                    <b>Team</b>
+                  </div>
+                  <div style={{ color: "#5f6368" }} className="col">
+                    <b>Report#</b>
+                  </div>
                 </div>
 
                 {this.state.moss_info &&
@@ -128,7 +143,9 @@ class StatsView extends Component {
                 {this.state.moss_info &&
                   Object.keys(this.state.moss_info).map((key, i) => (
                     <div>
-                      <div className="col">{key}</div>
+                      <div style={{ color: "#5f6368" }} className="col">
+                        <b>{key}</b>
+                      </div>
                       {this.getTeamInfo(this.state.moss_info[key], 1)}
                     </div>
                   ))}
@@ -149,7 +166,9 @@ class StatsView extends Component {
                 {this.state.moss_info &&
                   Object.keys(this.state.moss_info).map((key, i) => (
                     <div>
-                      <div className="col">{key}</div>
+                      <div style={{ color: "#5f6368" }} className="col">
+                        <b>{key}</b>
+                      </div>
                       {this.getTeamInfo(this.state.moss_info[key], 2)}
                     </div>
                   ))}

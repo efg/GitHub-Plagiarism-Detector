@@ -2,12 +2,12 @@ import React, { Component } from "react";
 
 import "../../dashboard/dashboard.css";
 import StatsView from "./statsview";
+import Heading from "../heading/heading";
 
 class ListView extends Component {
   constructor(props) {
     super(props);
     this.getTabRow = this.getTabRow.bind(this);
-    
   }
   getTabRow(tabRow) {
     const report =
@@ -30,31 +30,18 @@ class ListView extends Component {
       </tr>
     );
   }
-  
 
-  
   render() {
-
-	
     return (
       <>
         <div className="container">
-          <div className="card overflow-hidden mb-3">
-            <div className="card-body p-2">
-              <div className="row justify-content-between align-items-center pd">
-                <div className="col">Asssignment: {this.props.check_name}</div>
-                <div className="col">
-                  <button
-                    type="button"
-                    className="btn btn-falcon-primary float-right"
-                    onClick={this.props.onBackPress}
-                  >
-                    Back
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Heading
+            title={"Asssignment"}
+            value={this.props.check_name}
+            isBack={true}
+            onBackPress={this.props.onBackPress}
+          />
+
           <div className="row mr-1">
             <table className="table">
               <thead>
@@ -75,7 +62,10 @@ class ListView extends Component {
             </table>
           </div>
         </div>
-        <StatsView check_id={this.props.check_id}/>
+        <StatsView
+          check_id={this.props.check_id}
+          onBackPress={this.props.onBackPress}
+        />
       </>
     );
   }
