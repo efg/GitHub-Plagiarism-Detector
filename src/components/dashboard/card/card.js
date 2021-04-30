@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./card.css";
-const moment = require('moment')
+const moment = require("moment");
 class Card extends Component {
   render() {
     return (
@@ -10,7 +10,8 @@ class Card extends Component {
             <h6 className="pb-0">{this.props.name}</h6>
             <p className="card-text pb-1">
               <small className="text-muted">
-                {this.props.infoAttr}: {moment(this.props.infoVal).format('MM/DD/YYYY')}
+                {this.props.infoAttr}:{" "}
+                {moment(this.props.infoVal).format("MM/DD/YYYY")}
               </small>
             </p>
           </div>
@@ -26,7 +27,7 @@ class Card extends Component {
           <div className="card-footer bg-light p-0">
             <button
               className="btn btn-sm btn-link"
-              onClick={() => this.props.onViewPress(this.props.id)}
+              onClick={() => this.props.onViewPress(this.props.id, this.props.name)}
             >
               View
             </button>

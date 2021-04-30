@@ -23,7 +23,6 @@ class CheckView extends Component {
       header: "",
       tabView: false,
       tabData: [],
-    //   moss_info: [],
     };
 
     this.getCard = this.getCard.bind(this);
@@ -34,7 +33,6 @@ class CheckView extends Component {
     this.getReports = this.getReports.bind(this);
     this.removeCheck = this.removeCheck.bind(this);
     this.hideTabView = this.hideTabView.bind(this);
-    // this.get_MOSS_info = this.get_MOSS_info.bind(this);
     for (var i in languages) this.state.languages.push(i);
   }
 
@@ -55,13 +53,14 @@ class CheckView extends Component {
     );
   }
 
-  async getReports(check_id) {
-    console.log(check_id);
+  async getReports(check_id, check_name) {
+    // console.log(check_id);
     await axios
-      .get("http://127.0.0.1:5000/report/list?check_id=" + check_id)
+      .get("/report/list?check_id=" + check_id)
       .then((res) => {
         console.log(res.data["payload"]);
         this.setState({
+          name: check_name,
           check_id: check_id,
           tabView: true,
           tabData: res.data["payload"],
@@ -71,15 +70,15 @@ class CheckView extends Component {
         console.log(error["message"]);
       });
   }
-
+  /**
+   *
+   * @param {*} check_id
+   * @param {*} course_id
+   * Marks check as hidden so not to show on the UI
+   */
   async removeCheck(check_id, course_id) {
     await axios
-      .get(
-        "http://127.0.0.1:5000/check/delete?check_id=" +
-          check_id +
-          "&course_id=" +
-          course_id
-      )
+      .get("/check/delete?check_id=" + check_id + "&course_id=" + course_id)
       .then((res) => {
         console.log("response from check delete =>", res.data["payload"]);
         this.setState({
@@ -92,7 +91,6 @@ class CheckView extends Component {
         console.log(error["message"]);
       });
   }
-  
 
   hideTabView() {
     this.setState({ tabView: false, tabData: [] });
@@ -139,10 +137,9 @@ class CheckView extends Component {
     data.append("header", this.state.header);
     data.append("csvFile", this.state.csvFile);
     data.append("pathscsv", this.state.pathscsv);
-    // console.log(data);
 
     await axios
-      .post("http://127.0.0.1:5000/check/new", data)
+      .post("/check/new", data)
       .then((res) => {
         this.props.getChecks(this.state.course_id);
       })
@@ -155,10 +152,10 @@ class CheckView extends Component {
     if (this.state.tabView) {
       return (
         <ListView
+          check_name={this.state.name}
           check_id={this.state.check_id}
           tabRows={this.state.tabData}
           onBackPress={this.hideTabView}
-        //   get_MOSS_info={this.get_MOSS_info}
         />
       );
     }
@@ -168,7 +165,7 @@ class CheckView extends Component {
           <div class="card overflow-hidden mb-3">
             <div class="card-body p-2">
               <div class="row justify-content-between align-items-center pd">
-                <div class="col">Checks</div>
+                <div class="col">Assignments</div>
                 <div class="col">
                   <button
                     type="button"
@@ -176,7 +173,7 @@ class CheckView extends Component {
                     data-toggle="modal"
                     data-target="#exampleModal"
                   >
-                    New Check
+                    New Assignment
                   </button>
                 </div>
               </div>

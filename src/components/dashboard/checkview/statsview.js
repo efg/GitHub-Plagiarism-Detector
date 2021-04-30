@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { Component } from "react";
+import ReactTooltip from "react-tooltip";
 
 class StatsView extends Component {
   constructor(props) {
@@ -12,17 +13,17 @@ class StatsView extends Component {
   }
 
   get_MOSS_info(check_id) {
-    console.log("inside get MOSS", check_id);
+    // console.log("inside get MOSS", check_id);
 
     axios
-      .get(`http://127.0.0.1:5000/check/similarities?check_id=${check_id}`)
+      .get(`/check/similarities?check_id=${check_id}`)
       .then((res) => {
-        console.log(res.data.payload);
+        // console.log(res.data.payload);
         this.setState({ moss_info: res.data.payload });
         this.setState({ loading: false, key: this.getAKey(res.data.payload) });
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -56,15 +57,28 @@ class StatsView extends Component {
   }
 
   getTeamInfo(info, teamNo) {
-    // for (const [key, val] of Object.entries(info)) {
-    {
-      console.log(info);
-    }
     return (
       <div style={{ flexDirection: "column" }} className="col">
         {info.length > 0 &&
           info.map((obj, k) => (
-            <div key={k}>{teamNo === 1 ? obj.dupl_code1 : obj.dupl_code2}</div>
+            <div
+              style={
+                //hightlight high code similarity extracted from MOSS report
+                {
+                  backgroundColor:
+                    teamNo === 1
+                      ? obj.dupl_code1 > 70
+                        ? "yellow"
+                        : ""
+                      : obj.dupl_code2 > 70
+                      ? "yellow"
+                      : "",
+                }
+              }
+              key={k}
+            >
+              {teamNo === 1 ? obj.dupl_code1 : obj.dupl_code2}
+            </div>
           ))}
       </div>
       // }
@@ -77,18 +91,20 @@ class StatsView extends Component {
     }
     return (
       <>
-        <div className="container">
+        <div id="stats-view" className="container">
           <div>
             <strong>Statistics</strong>
           </div>
 
           <div className="row justify-content-md-center">
             <div className="col-2">
-              <label>Team Names</label>
+              <label>
+                <strong>Team Names</strong>
+              </label>
               <div style={{ flexDirection: "column" }} className="row">
                 <div className="row">
                   <div className="col">Team</div>
-                  <div className="col">Report</div>
+                  <div className="col">Report#</div>
                 </div>
 
                 {this.state.moss_info &&
@@ -99,7 +115,15 @@ class StatsView extends Component {
               </div>
             </div>
             <div className="col-5">
-              <label> First Team </label>
+              <label>
+                <strong>
+                  Shared Code
+                  <a data-tip="% of first team’s code that is shared with second team">
+                    ❓
+                  </a>
+                  <ReactTooltip place="top" type="info" effect="solid" />
+                </strong>
+              </label>
               <div style={{ flexDirection: "row" }} className="row">
                 {this.state.moss_info &&
                   Object.keys(this.state.moss_info).map((key, i) => (
@@ -112,7 +136,15 @@ class StatsView extends Component {
             </div>
 
             <div className="col-5">
-              <label>Second Team</label>
+              <label>
+                <strong>
+                  Shared Code
+                  <a data-tip="% of second team’s code that is shared with first team">
+                    ❓
+                  </a>
+                  <ReactTooltip place="top" type="info" effect="solid" />
+                </strong>
+              </label>
               <div style={{ flexDirection: "row" }} className="row">
                 {this.state.moss_info &&
                   Object.keys(this.state.moss_info).map((key, i) => (

@@ -22,7 +22,7 @@ class Login extends Component {
         const email = this.state.email;
         const password = this.state.password;
 
-        await axios.post('http://127.0.0.1:5000/user/login', { email, password })
+        await axios.post('/user/login', { email, password })
             .then(res => {
                 // Redirect to next page here
                 localStorage.setItem('user_id', res.data['payload'][0]);

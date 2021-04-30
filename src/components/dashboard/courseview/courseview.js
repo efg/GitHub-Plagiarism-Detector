@@ -34,7 +34,7 @@ class CourseView extends Component {
     const user_id = this.state.user_id;
 
     await axios
-      .post("http://127.0.0.1:5000/course/new", { name, user_id })
+      .post("/course/new", { name, user_id })
       .then((res) => {
         window.location.reload();
       })

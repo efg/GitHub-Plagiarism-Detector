@@ -18,7 +18,7 @@ class Dashboard extends Component {
     async componentDidMount() {
         const user_id = localStorage.getItem('user_id');
         const admin = localStorage.getItem('admin');
-        await axios.get('http://127.0.0.1:5000/course/list?user_id=' + user_id + '&admin=' + admin)
+        await axios.get('/course/list?user_id=' + user_id + '&admin=' + admin)
             .then(res => {
                 this.setState({ courses: res.data['payload'] })
             })
@@ -29,7 +29,7 @@ class Dashboard extends Component {
     }
 
     async getChecks(course_id) {
-        await axios.get('http://127.0.0.1:5000/check/list?course_id=' + course_id)
+        await axios.get('/check/list?course_id=' + course_id)
             .then(res => {
                 this.setState({ 
                     selectedCourse: course_id, 

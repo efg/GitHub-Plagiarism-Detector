@@ -6,12 +6,10 @@ import StatsView from "./statsview";
 class ListView extends Component {
   constructor(props) {
     super(props);
-    this.count = 0;
     this.getTabRow = this.getTabRow.bind(this);
     
   }
   getTabRow(tabRow) {
-    this.count += 1;
     const report =
       tabRow.status && tabRow.report.includes("/") ? (
         <a href={tabRow.report} target="_blank">
@@ -24,8 +22,8 @@ class ListView extends Component {
       );
 
     return (
-      <tr key={this.count}>
-        <th scope="row">{this.count}</th>
+      <tr key={tabRow.reportId}>
+        <th scope="row">{tabRow.reportId}</th>
         <td>{tabRow.date}</td>
         <td>{tabRow.status ? "Complete" : "In Complete"}</td>
         <td>{report}</td>
@@ -44,7 +42,7 @@ class ListView extends Component {
           <div className="card overflow-hidden mb-3">
             <div className="card-body p-2">
               <div className="row justify-content-between align-items-center pd">
-                <div className="col">Checks</div>
+                <div className="col">Asssignment: {this.props.check_name}</div>
                 <div className="col">
                   <button
                     type="button"

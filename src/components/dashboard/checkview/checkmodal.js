@@ -18,7 +18,7 @@ class CheckModal extends Component {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                New Check
+                New Assignment
               </h5>
               <button
                 type="button"
@@ -37,7 +37,7 @@ class CheckModal extends Component {
                   type="text"
                   name="name"
                   id="checkName"
-                  placeholder="Name for the Check"
+                  placeholder="Name for the Assignment"
                   onChange={this.props.handleChange}
                 />
               </div>
