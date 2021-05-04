@@ -6,7 +6,6 @@ import axios from "axios";
 class CourseView extends Component {
   constructor(props) {
     super(props);
-    // console.log(props.courses);
     this.getCard = this.getCard.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -29,7 +28,6 @@ class CourseView extends Component {
     );
   }
   onFormSubmit = async () => {
-    // console.log(this.state);
     const name = this.state.name;
     const user_id = this.state.user_id;
 
@@ -60,22 +58,30 @@ class CourseView extends Component {
               <div className="row justify-content-between align-items-center pd">
                 <div className="col">Courses</div>
                 <div className="col">
-                    <button type="button" className="btn btn-falcon-primary float-right" data-toggle="modal" data-target="#exampleModal">
-                        New Course
-                    </button>
+                  <button
+                    type="button"
+                    className="btn btn-falcon-primary float-right"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                  >
+                    New Course
+                  </button>
                 </div>
               </div>
             </div>
           </div>
           <div className="row mr-1">
-            {this.props.courses? (this.props.courses.map((course) => this.getCard(course))): <h6>&nbsp;&nbsp; No Courses Found</h6>}
+            {this.props.courses ? (
+              this.props.courses.map((course) => this.getCard(course))
+            ) : (
+              <h6>&nbsp;&nbsp; No Courses Found</h6>
+            )}
           </div>
         </div>
         <CourseModal
           onSubmit={this.onFormSubmit}
           handleChange={this.handleChange}
         ></CourseModal>
-        
       </div>
     );
   }

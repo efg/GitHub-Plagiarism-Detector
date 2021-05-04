@@ -19,5 +19,4 @@ def parse(csv_file, header):
     for row in csv_input:
         entries.append(row)
     logger.info(f"No of entries in the csv: {len(entries)}")
-    print(f"\nNo of entries in the csv: {len(entries)} {entries}")
     return entries

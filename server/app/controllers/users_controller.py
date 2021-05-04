@@ -1,6 +1,7 @@
 from app import db
 from app.models.users import User
 
+# Create a new user then store in DB
 class UserController:
     @staticmethod
     def new(parameters):

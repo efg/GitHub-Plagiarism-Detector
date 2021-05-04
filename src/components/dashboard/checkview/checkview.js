@@ -54,11 +54,9 @@ class CheckView extends Component {
   }
 
   async getReports(check_id, check_name) {
-    // console.log(check_id);
     await axios
       .get("/report/list?check_id=" + check_id)
       .then((res) => {
-        console.log(res.data["payload"]);
         this.setState({
           name: check_name,
           check_id: check_id,
@@ -80,7 +78,6 @@ class CheckView extends Component {
     await axios
       .get("/check/delete?check_id=" + check_id + "&course_id=" + course_id)
       .then((res) => {
-        console.log("response from check delete =>", res.data["payload"]);
         this.setState({
           selectedCourse: course_id,
           displayChecks: true,
@@ -108,8 +105,6 @@ class CheckView extends Component {
     } else {
       this.setState({ header: "False" });
     }
-    // this.state.csvFile = event.target.files[0];
-    console.log(this.state);
   };
 
   uploadFile = (event) => {

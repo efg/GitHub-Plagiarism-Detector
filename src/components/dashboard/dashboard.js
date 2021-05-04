@@ -1,68 +1,68 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Navbar from '../navigation/navbar';
-import CourseView from './courseview/courseview';
-import CheckView from './checkview/checkview';
-// import './dashboard.css';
+import React, { Component } from "react";
+import axios from "axios";
+import Navbar from "../navigation/navbar";
+import CourseView from "./courseview/courseview";
+import CheckView from "./checkview/checkview";
 class Dashboard extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            displayChecks: false,
-            selectedCourse: -1,
-            courses: [],
-            checks: [],
-        };
-        this.getChecks = this.getChecks.bind(this);
-    }
-    async componentDidMount() {
-        const user_id = localStorage.getItem('user_id');
-        const admin = localStorage.getItem('admin');
-        await axios.get('/course/list?user_id=' + user_id + '&admin=' + admin)
-            .then(res => {
-                this.setState({ courses: res.data['payload'] })
-            })
-            .catch((error) => {
-                if (error && error.response)
-                    console.log(error.response.data);
-            });
-    }
-
-    async getChecks(course_id) {
-        await axios.get('/check/list?course_id=' + course_id)
-            .then(res => {
-                this.setState({ 
-                    selectedCourse: course_id, 
-                    displayChecks: true, 
-                    checks: res.data['payload'] });
-            })
-            .catch((error) => {
-                console.log(error['message']);
-            });
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayChecks: false,
+      selectedCourse: -1,
+      courses: [],
+      checks: [],
     };
+    this.getChecks = this.getChecks.bind(this);
+  }
+  async componentDidMount() {
+    const user_id = localStorage.getItem("user_id");
+    const admin = localStorage.getItem("admin");
+    await axios
+      .get("/course/list?user_id=" + user_id + "&admin=" + admin)
+      .then((res) => {
+        this.setState({ courses: res.data["payload"] });
+      })
+      .catch((error) => {
+        if (error && error.response) console.log(error.response.data);
+      });
+  }
 
-    getDisplayComponent() {
-        console.log(this.state);
-        if (this.state.displayChecks)
-            return <CheckView 
-                        courseId={this.state.selectedCourse} 
-                        getChecks={this.getChecks} 
-                        checks={this.state.checks} />;
-        return <CourseView 
-                    courses={this.state.courses} 
-                    getChecks={this.getChecks} />
-    }
-    render() {
-        let secondComponent = this.getDisplayComponent();
-        return (
-            <div>
-                <Navbar onLogOut={this.props.onLogOut} />
-                <div className="container">
-                    {secondComponent}
-                </div>
-            </div>
+  async getChecks(course_id) {
+    await axios
+      .get("/check/list?course_id=" + course_id)
+      .then((res) => {
+        this.setState({
+          selectedCourse: course_id,
+          displayChecks: true,
+          checks: res.data["payload"],
+        });
+      })
+      .catch((error) => {
+        console.log(error["message"]);
+      });
+  }
 
-        );
-    }
+  getDisplayComponent() {
+    if (this.state.displayChecks)
+      return (
+        <CheckView
+          courseId={this.state.selectedCourse}
+          getChecks={this.getChecks}
+          checks={this.state.checks}
+        />
+      );
+    return (
+      <CourseView courses={this.state.courses} getChecks={this.getChecks} />
+    );
+  }
+  render() {
+    let secondComponent = this.getDisplayComponent();
+    return (
+      <div>
+        <Navbar onLogOut={this.props.onLogOut} />
+        <div className="container">{secondComponent}</div>
+      </div>
+    );
+  }
 }
-export default Dashboard;   
+export default Dashboard;

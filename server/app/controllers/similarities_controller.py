@@ -2,7 +2,7 @@ from app import db
 from app.models.similarities import Similarities
 from flask import jsonify
 
-
+# Extract and store all the information from the MOSS report for each run 
 class SimilaritiesController:
     @staticmethod
     def new(check_id: int, report_id: int, data: list):

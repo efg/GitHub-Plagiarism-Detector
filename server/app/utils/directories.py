@@ -10,7 +10,6 @@ def move_to_root_folder(root_path, curr_path):
     # print("Path: ", curr_path)
     try:
         if not os.path.isdir(curr_path): #dir not exists!
-            print("\n>>> Dir not exists!")
             return 
         for filename in os.listdir(curr_path):
             if os.path.isfile(os.path.join(curr_path, filename)):

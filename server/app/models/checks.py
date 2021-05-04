@@ -80,7 +80,6 @@ class Check(db.Model):
         os.mkdir(check_dir_path)
 
         # Clone all github repositories and append the clone directory in 'directories' list
-        print(f"\n\nIMP -- length of submissions: {len(self.submissions)}")
         # for submission in self.get_all_submissions(check_id):
         for submission in self.submissions:
             submission_dir = os.path.join(
@@ -98,8 +97,6 @@ class Check(db.Model):
             except (Exception):
                 logger.exception(">>> Git Error!")
                 logger.debug(f"Unable to clone{submission.github_url}")
-                # sys.exit(0)
-        print(f"\nTotal cloned repos: {len(directories)}")
         return directories
 
     # Removes the check directory along with its sub directories

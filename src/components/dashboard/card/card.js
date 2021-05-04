@@ -27,7 +27,9 @@ class Card extends Component {
           <div className="card-footer bg-light p-0">
             <button
               className="btn btn-sm btn-link"
-              onClick={() => this.props.onViewPress(this.props.id, this.props.name)}
+              onClick={() =>
+                this.props.onViewPress(this.props.id, this.props.name)
+              }
             >
               View
             </button>

@@ -2,7 +2,7 @@ from app import db
 from app.models.paths import Path
 from app.utils.csv_parser import parse
 
-
+# The relative paths for the files to include in the MOSS check 
 class PathsController:
 
     @staticmethod

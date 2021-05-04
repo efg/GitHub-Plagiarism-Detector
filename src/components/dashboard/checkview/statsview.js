@@ -17,12 +17,11 @@ class StatsView extends Component {
     axios
       .get(`/check/similarities?check_id=${check_id}`)
       .then((res) => {
-        // console.log(res.data.payload);
         this.setState({ moss_info: res.data.payload });
         this.setState({ loading: false, key: this.getAKey(res.data.payload) });
       })
       .catch((error) => {
-        // console.log(error);
+        console.log(error);
       });
   }
 
@@ -102,10 +101,6 @@ class StatsView extends Component {
             isBack={true}
             onBackPress={this.props.onBackPress}
           />
-          {/* <div
-            style={{margin: "1rem"}}>
-            <h4><strong>Statistics</strong></h4>
-          </div> */}
 
           <div className="row justify-content-md-center">
             <div className="col-2">

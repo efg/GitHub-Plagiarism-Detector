@@ -4,15 +4,14 @@ from app.utils.csv_parser import parse
 from app.models.checks import Check
 from app.models.paths import Path
 
-
+# Read and store all the infomation from user input as well as CSV files then 
+# clone all repos to run MOSS later
 class SubmissionController:
 
     # Adds new entries to submission controller and returns duplicate entries if found any.
-    # TODO: Handle return values in front-end
     # Parameters should have fields named header(for csv files), check_id
     @staticmethod
     def new(parameters, param_files):
-        print("Files-> \n", parameters, param_files.to_dict())
         
         check_id = parameters['check_id']
 
