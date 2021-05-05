@@ -3,6 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+# To scrape given MOSS report URL
 
 def extract_info(text: str) -> tuple:
     """return team name and code similarty """
