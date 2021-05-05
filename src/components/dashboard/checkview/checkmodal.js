@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactTooltip from "react-tooltip";
 
 class CheckModal extends Component {
   constructor(props) {
@@ -61,6 +62,8 @@ class CheckModal extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="startDate">Start Date</label>
+                <a data-tip="start a MOSS run from this day">❓</a>
+                <ReactTooltip place="top" type="info" effect="solid" />
                 <input
                   className="form-control"
                   type="date"
@@ -72,6 +75,8 @@ class CheckModal extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="endDate">End Date</label>
+                <a data-tip="End a MOSS run">❓</a>
+                <ReactTooltip place="top" type="info" effect="solid" />
                 <input
                   className="form-control"
                   type="date"
@@ -96,7 +101,9 @@ class CheckModal extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="csvFile">CSV file of repository</label>
+                <label htmlFor="csvFile">CSV for list of repositories</label>
+                <a data-tip="'<teamName>, <GitHub URL>'">❓</a>
+                <ReactTooltip place="top" type="info" effect="solid" />
                 <input
                   className="form-control"
                   type="file"
@@ -106,7 +113,11 @@ class CheckModal extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="pathscsv">CSV file of file paths</label>
+                <label htmlFor="pathscsv">
+                  CSV for list of paths to be included
+                </label>
+                <a data-tip="eg, /app/ or /src/">❓</a>
+                <ReactTooltip place="top" type="info" effect="solid" />
                 <input
                   className="form-control"
                   type="file"
