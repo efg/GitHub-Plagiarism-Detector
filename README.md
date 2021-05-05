@@ -9,6 +9,7 @@ Note: This project uses MOSS software by Standford Univerity
 
 ![demo](./media/GPD2.gif)
 
+![Stats](./media/stats.png)
 ### Tech Stack 
 - Flask
 - React 
