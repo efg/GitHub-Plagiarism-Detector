@@ -50,7 +50,7 @@ class ChecksController:
         scheduler.add_job(
             func=ChecksController.run,
             trigger="interval",
-            hours=1,
+            hours=12,
             args=[curr_check.id],
             next_run_time=datetime.now())
 
@@ -63,7 +63,7 @@ class ChecksController:
             report = ReportsController.new(check_id, datetime.now(), "")
             directories = check.download_submissions(check_id)
             url = check.run_check(check.language, directories)
-            # check.remove_submissions()
+            check.remove_submissions()
             # url = "http://moss.stanford.edu/results/0/8842422701801"  # TODO: remove this line
             print("\n\n >>> Run end", url)
 

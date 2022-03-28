@@ -3,32 +3,62 @@ import React, { Component } from "react";
 import "../../dashboard/dashboard.css";
 import StatsView from "./statsview";
 import Heading from "../heading/heading";
+import { MDBDataTable } from 'mdbreact';
+import { MDBBtn } from "mdbreact";
 
 class ListView extends Component {
   constructor(props) {
     super(props);
-    this.getTabRow = this.getTabRow.bind(this);
+    this.dataObject = {columns: [{label: 'Run ID', field: 'runid', sort: 'desc', width: 150},
+    {label: 'Date', field: 'date', sort: 'asc', width: 150},
+    {label: 'Status', field: 'status', sort: 'asc', width: 150},
+    {label: 'Report', field: 'report', sort: 'asc', width: 150}],
+    rows: []};
+    this.state = {
+      tabRows: this.props.tabRows
+    };  
+    this.setTableData();
+    // this.setTableData = this.setTableData.bind(this);
   }
-  getTabRow(tabRow) {
-    const report =
-      tabRow.status && tabRow.report.includes("/") ? (
-        <a href={tabRow.report} target="_blank">
-          View
-        </a>
-      ) : !tabRow.status ? (
-        <div>Run Failed</div>
-      ) : (
-        <div></div>
-      );
+  // getTabRow(tabRow) {
+  //   const report =
+  //     tabRow.status && tabRow.report.includes("/") ? (
+  //       <a href={tabRow.report} target="_blank">
+  //         View
+  //       </a>
+  //     ) : !tabRow.status ? (
+  //       <div>Run Failed</div>
+  //     ) : (
+  //       <div></div>
+  //     );
 
-    return (
-      <tr key={tabRow.reportId}>
-        <th scope="row">{tabRow.reportId}</th>
-        <td>{tabRow.date}</td>
-        <td>{tabRow.status ? "Complete" : "In Complete"}</td>
-        <td>{report}</td>
-      </tr>
-    );
+  //   return (
+  //     <tr key={tabRow.reportId}>
+  //       <th scope="row">{tabRow.reportId}</th>
+  //       <td>{tabRow.date}</td>
+  //       <td>{tabRow.status ? "Complete" : "In Complete"}</td>
+  //       <td>{report}</td>
+  //     </tr>
+  //   );
+  // }
+
+  setTableData() {
+    for (const row in this.state.tabRows) {
+      this.dataObject.rows.push({'runid': this.state.tabRows[row].reportId, 'date': this.state.tabRows[row].date, 
+      'status': this.state.tabRows[row].status ? "Complete" : "In Complete", 
+      'report': 
+      this.state.tabRows[row].status && this.state.tabRows[row].report.includes("/") ? (
+              <a href={this.state.tabRows[row].report} target="_blank" style={{color:"red"}}> View
+          </a>
+            ) : !this.state.tabRows[row].status ? (
+              <div>Run Failed</div>
+            ) : (
+              <div></div>
+            )
+     
+    });
+    }
+    this.setState({tabRows: this.dataObject});
   }
 
   render() {
@@ -42,7 +72,7 @@ class ListView extends Component {
             onBackPress={this.props.onBackPress}
           />
 
-          <div className="row mr-1">
+          {/* <div className="row mr-1">
             <table className="table">
               <thead>
                 <tr>
@@ -60,7 +90,14 @@ class ListView extends Component {
                 )}
               </tbody>
             </table>
-          </div>
+          </div> */}
+          <MDBDataTable
+      scrollX
+      striped
+      bordered
+      order={['runid', 'desc']}
+      data={this.dataObject}
+    />
         </div>
         <StatsView
           check_id={this.props.check_id}
