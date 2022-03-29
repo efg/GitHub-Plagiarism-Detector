@@ -1,5 +1,6 @@
 from app import db
 from app.models.reports import Report
+from sqlalchemy import text
 
 # Shows all of the MoSS runs on the assignment
 class ReportsController:
@@ -15,7 +16,7 @@ class ReportsController:
         """returns a list of all MOSS run of an assignment """
         check_id = parameters.get('check_id')
         result_list = []
-        results = Report.query.filter_by(check_id=check_id)
+        results = Report.query.filter_by(check_id=check_id).order_by(text("reports_id desc"))
         for res in results:
             result_list.append({
                     'reportId': res.id,

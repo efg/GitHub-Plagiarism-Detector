@@ -4,19 +4,10 @@ import "../../dashboard/dashboard.css";
 import StatsView from "./statsview";
 import Heading from "../heading/heading";
 import { MDBDataTable } from 'mdbreact';
-import { MDBBtn } from "mdbreact";
 
 class ListView extends Component {
   constructor(props) {
     super(props);
-    this.dataObject = {columns: [{label: 'Run ID', field: 'runid', sort: 'desc', width: 150},
-    {label: 'Date', field: 'date', sort: 'asc', width: 150},
-    {label: 'Status', field: 'status', sort: 'asc', width: 150},
-    {label: 'Report', field: 'report', sort: 'asc', width: 150}],
-    rows: []};
-    this.state = {
-      tabRows: this.props.tabRows
-    };  
     this.setTableData();
     // this.setTableData = this.setTableData.bind(this);
   }
@@ -43,15 +34,20 @@ class ListView extends Component {
   // }
 
   setTableData() {
-    for (const row in this.state.tabRows) {
-      this.dataObject.rows.push({'runid': this.state.tabRows[row].reportId, 
-      'date': this.state.tabRows[row].date, 
-      'status': this.state.tabRows[row].status ? "Complete" : "In Complete", 
+    this.dataObject = {columns: [{label: 'Run ID', field: 'runid', width: 150},
+    {label: 'Date', field: 'date', sort: 'asc', width: 150},
+    {label: 'Status', field: 'status', sort: 'asc', width: 150},
+    {label: 'Report', field: 'report', sort: 'asc', width: 150}],
+    rows: []};
+    for (const row in this.props.tabRows) {
+      this.dataObject.rows.push({'runid': this.props.tabRows[row].reportId, 
+      'date': this.props.tabRows[row].date, 
+      'status': this.props.tabRows[row].status ? "Complete" : "In Complete", 
       'report': 
-      this.state.tabRows[row].status && this.state.tabRows[row].report.includes("/") ? (
-              <a href={this.state.tabRows[row].report} target="_blank" style={{color:"red"}}> View
+      this.props.tabRows [row].status && this.props.tabRows [row].report.includes("/") ? (
+              <a href={this.props.tabRows[row].report} target="_blank" style={{color:"red"}}> View
           </a>
-            ) : !this.state.tabRows[row].status ? (
+            ) : !this.props.tabRows[row].status ? (
               <div>Run Failed</div>
             ) : (
               <div></div>
@@ -59,7 +55,6 @@ class ListView extends Component {
      
     });
     }
-    this.setState({tabRows: this.dataObject});
   }
 
   render() {
@@ -95,8 +90,8 @@ class ListView extends Component {
           <MDBDataTable
       scrollX
       striped
+      responsive
       bordered
-      order={['runid', 'desc']}
       data={this.dataObject}
     />
         </div>

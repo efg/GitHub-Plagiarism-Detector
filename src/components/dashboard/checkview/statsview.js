@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
 import Heading from "../heading/heading";
 import { MDBDataTable } from 'mdbreact';
-// import 'font-awesome/css/font-awesome.min.css';
-// import 'mdbreact/dist/css/mdb.css';
 
 class StatsView extends Component {
   constructor(props) {
@@ -20,9 +18,8 @@ class StatsView extends Component {
     axios
       .get(`/check/similarities?check_id=${check_id}`)
       .then((res) => {
-        this.setState({ moss_info: res.data.payload.sort() });
+        this.setState({ moss_info: res.data.payload });
         this.setState({ loading: false });
-        // this.getLatestRecords();
         this.setData();
       })
       .catch((error) => {
@@ -100,6 +97,7 @@ class StatsView extends Component {
     });
       }
     }
+    dataObject.rows.sort((a, b) => parseFloat(b['runid']) - parseFloat(a['runid']));
   this.setState({moss_info: dataObject});
   }
 
