@@ -20,7 +20,7 @@ class StatsView extends Component {
     axios
       .get(`/check/similarities?check_id=${check_id}`)
       .then((res) => {
-        this.setState({ moss_info: res.data.payload });
+        this.setState({ moss_info: res.data.payload.sort() });
         this.setState({ loading: false });
         // this.getLatestRecords();
         this.setData();
@@ -75,17 +75,29 @@ class StatsView extends Component {
 
   setData() {
     const dataObject = {columns: [{label: 'Run ID', field: 'runid', sort: 'desc', width: 100},
-    {label: 'Repo A', field: 'repo_a', sort: 'asc', width: 150},
-    {label: 'Repo B', field: 'repo_b', sort: 'asc', width: 150},
-    {label: 'Shared Code Repo A to B', field: 'share_a_to_b', sort: 'asc', width: 150},
-    {label: 'Shared Code Repo B to A', field: 'share_b_to_a', sort: 'asc', width: 150}],
+    {label: 'Repo A', field: 'repo_a', sort: 'asc', width: 100},
+    {label: 'Repo B', field: 'repo_b', sort: 'asc', width: 100},
+    {label: 'Shared Code Repo A to B', field: 'share_a_to_b', sort: 'asc', width: 100},
+    {label: 'Shared Code Repo B to A', field: 'share_b_to_a', sort: 'asc', width: 100},
+    {label: 'Similarity Jump Repo A to B', field: 'jump_a_to_b', sort: 'asc', width: 100},
+    {label: 'Similarity Jump Repo B to A', field: 'jump_b_to_a', sort: 'asc', width: 100}],
     rows: []};
     let allKeys = Object.keys(this.state.moss_info);
     for (const key in allKeys) {
       for (const run in this.state.moss_info[allKeys[key]]) {
-        dataObject.rows.push({'runid': allKeys[key], 'repo_a': this.state.moss_info[allKeys[key]][run]['repo1'],
-        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'], 'share_a_to_b': `${this.state.moss_info[allKeys[key]][run]['dupl_code1']}%`,
-      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`});
+        dataObject.rows.push({'runid': allKeys[key], 
+        'repo_a': this.state.moss_info[allKeys[key]][run]['repo1'],
+        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'], 
+        'share_a_to_b': `${this.state.moss_info[allKeys[key]][run]['dupl_code1']}%`,
+      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`, 
+      'jump_a_to_b': this.state.moss_info[allKeys[key]][run]['similarity_jump1'] != 'N/A' ? 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}%` : 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}`,
+      'jump_b_to_a': this.state.moss_info[allKeys[key]][run]['similarity_jump2'] != 'N/A' ? 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}%` : 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}`,
+    
+    });
       }
     }
   this.setState({moss_info: dataObject});

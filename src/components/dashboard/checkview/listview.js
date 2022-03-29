@@ -44,7 +44,8 @@ class ListView extends Component {
 
   setTableData() {
     for (const row in this.state.tabRows) {
-      this.dataObject.rows.push({'runid': this.state.tabRows[row].reportId, 'date': this.state.tabRows[row].date, 
+      this.dataObject.rows.push({'runid': this.state.tabRows[row].reportId, 
+      'date': this.state.tabRows[row].date, 
       'status': this.state.tabRows[row].status ? "Complete" : "In Complete", 
       'report': 
       this.state.tabRows[row].status && this.state.tabRows[row].report.includes("/") ? (

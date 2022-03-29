@@ -34,23 +34,54 @@ class SimilaritiesController:
             check_id=check_id).all()
 
         for obj in similarities_obj_list:
-            if str(obj.report_id) in MOSS_info:
-                MOSS_info[str(obj.report_id)] += [{
-                    'report_id': obj.report_id,
-                    'repo1': obj.repo1,
-                    'dupl_code1': obj.dupl_code1,
-                    'repo2': obj.repo2,
-                    'dupl_code2': obj.dupl_code2,
-                }]
-            else:
-                MOSS_info[str(obj.report_id)] = [
-                    {
+            similarities_obj_list_prev = Similarities.query.filter_by(check_id=check_id, repo1=obj.repo1,
+                                                                      repo2=obj.repo2, report_id=int(obj.report_id)-1).all()
+            if similarities_obj_list_prev:
+                if str(obj.report_id) in MOSS_info:
+                    MOSS_info[str(obj.report_id)] += [{
                         'report_id': obj.report_id,
                         'repo1': obj.repo1,
                         'dupl_code1': obj.dupl_code1,
                         'repo2': obj.repo2,
                         'dupl_code2': obj.dupl_code2,
-                    }
-                ]
+                        'similarity_jump1': obj.dupl_code1 - similarities_obj_list_prev[0].dupl_code1,
+                        'similarity_jump2': obj.dupl_code2 - similarities_obj_list_prev[0].dupl_code2
+                    }]
+                else:
+                    MOSS_info[str(obj.report_id)] = [
+                        {
+                            'report_id': obj.report_id,
+                            'repo1': obj.repo1,
+                            'dupl_code1': obj.dupl_code1,
+                            'repo2': obj.repo2,
+                            'dupl_code2': obj.dupl_code2,
+                            'similarity_jump1': obj.dupl_code1 - similarities_obj_list_prev[0].dupl_code1,
+                            'similarity_jump2': obj.dupl_code2 - similarities_obj_list_prev[0].dupl_code2
+                        }
+                    ]
+            else:
+                if str(obj.report_id) in MOSS_info:
+                    MOSS_info[str(obj.report_id)] += [{
+                        'report_id': obj.report_id,
+                        'repo1': obj.repo1,
+                        'dupl_code1': obj.dupl_code1,
+                        'repo2': obj.repo2,
+                        'dupl_code2': obj.dupl_code2,
+                        'similarity_jump1': 'N/A',
+                        'similarity_jump2': 'N/A'
+                    }]
+                else:
+                    MOSS_info[str(obj.report_id)] = [
+                        {
+                            'report_id': obj.report_id,
+                            'repo1': obj.repo1,
+                            'dupl_code1': obj.dupl_code1,
+                            'repo2': obj.repo2,
+                            'dupl_code2': obj.dupl_code2,
+                            'similarity_jump1': 'N/A',
+                            'similarity_jump2': 'N/A'
+                        }
+                    ]
+
         # print(MOSS_info)
         return MOSS_info
