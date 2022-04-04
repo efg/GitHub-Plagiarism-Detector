@@ -42,7 +42,7 @@ class ListView extends Component {
     for (const row in this.props.tabRows) {
       this.dataObject.rows.push({'runid': this.props.tabRows[row].reportId, 
       'date': this.props.tabRows[row].date, 
-      'status': this.props.tabRows[row].status ? "Complete" : "In Complete", 
+      'status': this.props.tabRows[row].status ? "Complete" : "Incomplete", 
       'report': 
       this.props.tabRows [row].status && this.props.tabRows [row].report.includes("/") ? (
               <a href={this.props.tabRows[row].report} target="_blank" style={{color:"red"}}> View
@@ -62,7 +62,7 @@ class ListView extends Component {
       <>
         <div className="container">
           <Heading
-            title={"Asssignment"}
+            title={"List of checks for assignment"}
             value={this.props.check_name}
             isBack={true}
             onBackPress={this.props.onBackPress}

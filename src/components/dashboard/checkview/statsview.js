@@ -145,7 +145,7 @@ class StatsView extends Component {
         <div id="stats-view" className="container">
           <Heading
             title={"Statistics"}
-            value={""}
+            value={"In the table below we are comparing each repo with every other repo and calculating the similarity percentage from Repo A to B and Repo B to A. We are also calculating the similarity percentage jump from the last run to current run. You will notice that the first run has similarity percentage jump as N/A since we do not have a previous run to compare with."}
             isBack={true}
             onBackPress={this.props.onBackPress}
           />
