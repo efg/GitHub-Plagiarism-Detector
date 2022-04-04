@@ -1,10 +1,6 @@
 from app import db, scheduler
 from app.models.checks import Check
 from app.models.reports import Report
-import smtplib, ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
 
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
@@ -61,13 +57,6 @@ class ChecksController:
     @staticmethod
     def run(check_id):
         # Download the latest submissions
-        sender_email = "avijaya6@ncsu.edu"
-        receiver_email = "avijaya6@ncsu.edu"
-        password = "zmwrqsvdnionsctv"
-
-        message = MIMEMultipart("alternative")
-        message["From"] = sender_email
-        message["To"] = receiver_email
         check = Check.query.filter_by(id=check_id).first()
         print("\n\nInside check run:  ", check_id)
         if check:
@@ -94,79 +83,8 @@ class ChecksController:
                     if reports:
                         jumps = SimilaritiesController.new(
                             check.id, reports[-1].id, MOSS_info)
-                        message["Subject"] = "Top jumps for the check " + str(check_id) + "- test"
-                        # Create the plain-text and HTML version of your message
-                        text = """\
-                                                Hi,
-                                                How are you?
-                                                Real Python has many great tutorials:
-                                                www.realpython.com"""
-                        if jumps:
-                            html = """\
-                                                <html>
-                                                    <head>
-                                                        <style>
-                                                            table, th, td {
-                                                                border: 1px solid white;
-                                                                border-collapse: collapse;
-                                                            }
-                                                            th, td {
-                                                              background-color: #96D4D4;
-                                                            }
-                                                            .alnright { text-align: right; }
-                                                        </style>
-                                                    </head>
-                                                <body>
-                                                    <div>
-                                                        <div>
-                                                            <p> Below are the top jumps for this check </p>
-                                                        </div>
-                                                        <div>
-                                                            <table style="width:100%">
-                                                                <tr>
-                                                                    <th>Team A</th>
-                                                                    <th>% matching Team A with Team B</th>
-                                                                    <th>Jump 1</th>
-                                                                    <th>Team B</th>
-                                                                    <th>% matching Team B with Team A</th>
-                                                                    <th>Jump 2</th>
-                                                                </tr>
-                                                """
-                            for x in jumps:
-                                html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+"%" + "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3]) + "</td><td class='alnright'>" + str(x[4]) +"%"+ "</td><td class='alnright'>" + str(x[5]) +"%" + "</td></tr>"
-
-                            html += """\
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </body> 
-                                                </html>
-                                                """
-                        else:
-                            html = """\
-                                <html>
-                                    <body>
-                                        <div>
-                                            <p> No positive jumps for this run</p>
-                                        </div>
-                                    </body>
-                                </html>
-                                """
-                        # Turn these into plain/html MIMEText objects
-                        part1 = MIMEText(text, "plain")
-                        part2 = MIMEText(html, "html")
-                        # Add HTML/plain-text parts to MIMEMultipart message
-                        # The email client will try to render the last part first
-                        message.attach(part1)
-                        message.attach(part2)
-
-                        # Create secure connection with server and send email
-                        context = ssl.create_default_context()
-                        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-                            server.login(sender_email, password)
-                            server.sendmail(
-                                sender_email, receiver_email, message.as_string()
-                            )
+                        check.send_email(jumps,check_id)
+                       
                     else:
                         raise ValueError("Report does not exists!")
                 except Exception as e:
@@ -208,3 +126,4 @@ class ChecksController:
             db.session.commit()
             return ChecksController.show_checks({'course_id': course_id})
         return []
+
