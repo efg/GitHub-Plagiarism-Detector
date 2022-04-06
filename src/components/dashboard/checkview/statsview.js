@@ -150,76 +150,7 @@ class StatsView extends Component {
             onBackPress={this.props.onBackPress}
           />
 
-          {/* <div className="row justify-content-md-center">
-            <div className="col-3">
-              <label>
-                <strong>Team Names</strong>
-              </label>
-              <div style={{ flexDirection: "column" }} className="col">
-                <div className="row">
-                  <div style={{ color: "#5f6368" }} className="col">
-                    <b>Repo 1</b>
-                  </div>
-                  <div style={{ color: "#5f6368" }} className="col">
-                    <b>Repo 2</b>
-                  </div>
-                </div>
-
-                {this.state.moss_info &&
-                  this.state.moss_info[this.state.key] &&
-                  this.state.moss_info[this.state.key].map((info, k) =>
-                    this.getTeamName(info, k)
-                  )}
-              </div>
-            </div>
-            <div className="col-9">
-              <label>
-                <strong>
-                  Shared Code
-                  <a data-tip="% of first team’s code that is shared with second team and vice-versa">
-                    ❓
-                  </a>
-                  <ReactTooltip place="top" type="info" effect="solid" />
-                </strong>
-              </label>
-              <div style={{ flexDirection: "row" }} className="row">
-                {this.state.moss_info &&
-                  Object.keys(this.state.moss_info).map((key, i) => (
-                    <div>
-                      <div style={{ color: "#5f6368" }} className="col">
-                        <b>{key} &emsp;&emsp; &emsp;</b>
-                      </div>
-                      {this.getTeamInfo(this.state.moss_info[key], 1)}
-                      {/* {this.getTeamInfo(this.state.moss_info[key], 2)} */}
-                    {/* </div>
-                  ))}
-              </div>
-            </div> */}
-
-            {/* <div className="col-5">
-              <label>
-                <strong>
-                  Shared Code
-                  <a data-tip="% of second team’s code that is shared with first team">
-                    ❓
-                  </a>
-                  <ReactTooltip place="top" type="info" effect="solid" />
-                </strong>
-              </label>
-              <div style={{ flexDirection: "row" }} className="row">
-                {this.state.moss_info &&
-                  Object.keys(this.state.moss_info).map((key, i) => (
-                    <div>
-                      <div style={{ color: "#5f6368" }} className="col">
-                        <b>{key}</b>
-                      </div>
-                      {this.getTeamInfo(this.state.moss_info[key], 2)}
-                    </div>
-                  ))}
-              </div>
-            </div> */}
           </div>
-        {/* </div> */}
         <MDBDataTable
       scrollX
       responsive

@@ -9,29 +9,7 @@ class ListView extends Component {
   constructor(props) {
     super(props);
     this.setTableData();
-    // this.setTableData = this.setTableData.bind(this);
   }
-  // getTabRow(tabRow) {
-  //   const report =
-  //     tabRow.status && tabRow.report.includes("/") ? (
-  //       <a href={tabRow.report} target="_blank">
-  //         View
-  //       </a>
-  //     ) : !tabRow.status ? (
-  //       <div>Run Failed</div>
-  //     ) : (
-  //       <div></div>
-  //     );
-
-  //   return (
-  //     <tr key={tabRow.reportId}>
-  //       <th scope="row">{tabRow.reportId}</th>
-  //       <td>{tabRow.date}</td>
-  //       <td>{tabRow.status ? "Complete" : "In Complete"}</td>
-  //       <td>{report}</td>
-  //     </tr>
-  //   );
-  // }
 
   setTableData() {
     this.dataObject = {columns: [{label: 'Run ID', field: 'runid', width: 150},
@@ -68,25 +46,6 @@ class ListView extends Component {
             onBackPress={this.props.onBackPress}
           />
 
-          {/* <div className="row mr-1">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Report</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.tabRows ? (
-                  this.props.tabRows.map((tabRow) => this.getTabRow(tabRow))
-                ) : (
-                  <p>No Reports Found</p>
-                )}
-              </tbody>
-            </table>
-          </div> */}
           <MDBDataTable
       scrollX
       striped
