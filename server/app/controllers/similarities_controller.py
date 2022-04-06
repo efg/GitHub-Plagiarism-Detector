@@ -1,11 +1,13 @@
 from app import db
 from app.models.similarities import Similarities
 from flask import jsonify
+import os
 
 # Extract and store all the information from the MOSS report for each run 
 class SimilaritiesController:
     @staticmethod
     def new(check_id: int, report_id: int, data: list):
+        maxjump =  int(os.getenv('MAXIMUM_JUMP_PERCENTAGE'))
         jumps = []
         print(data)
         for row in data:
@@ -20,8 +22,8 @@ class SimilaritiesController:
                 if prevRun:
                     jump1 = score1 - prevRun[0].dupl_code1
                     jump2 = score2 - prevRun[0].dupl_code2
-                    if jump1 >= 0 or jump2 >= 0:
-                        jumps.append([team1,score1, jump1, team2, score2, jump2])
+                    if jump1 >= maxjump or jump2 >= maxjump:
+                        jumps.append([team1,team2 ,score1, score2, jump1, jump2])
                 similar = Similarities(
                     check_id, report_id, team1, score1, team2, score2)
                 db.session.add(similar)

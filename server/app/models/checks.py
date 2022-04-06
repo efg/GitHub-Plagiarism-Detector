@@ -143,11 +143,7 @@ class Check(db.Model):
         message["To"] = receiver_email
         message["Subject"] = "Github Plagiarism Detector - Check " + str(check_id)
         # Create the plain-text and HTML version of your message
-        text = """\
-                Hi,
-                How are you?
-                Real Python has many great tutorials:
-                www.realpython.com"""
+        text = ""
         if jumps:
             html = """\
                     <html>
@@ -161,6 +157,10 @@ class Check(db.Model):
                                     background-color: #96D4D4;
                                 }
                                 .alnright { text-align: right; }
+                                .center {
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                }
                             </style>
                         </head>
                         <body>
@@ -168,21 +168,21 @@ class Check(db.Model):
                                 <div>
                                     <p><b>Below table indicates the top jumps for this check </b> </p>
                                     <p><b>NOTE:</b></p>
-                                    <p><b>Team A and Team B :</b> These two columns indicate the team names whose code is being checked.</p>
-                                    <p><b>Similarity percentage of Team A with Team B :</b> This column indicates percentage of first team A’s code that is shared with second team B for the current run.</p>
-                                    <p><b>Jump 1:</b> This column indicates the difference between the similarity percentage of Team A with Team B from current run to previous run.</p>
-                                    <p><b>Similarity percentage of Team B with Team A :</b> This column indicates percentage of first team B’s code that is shared with second team A for the current run.</p>
-                                    <p><b>Jump 2:</b> This column indicates the difference between the similarity percentage of Team B with Team A from current run to previous run.</p>
+                                    <p><b>Repo A and Repo B :</b> These two columns indicate the team names whose code is being checked.</p>
+                                    <p><b>Shared Code Repo A to B :</b> This column indicates percentage of first team A’s code that is shared with second team B for the current run.</p>
+                                    <p><b>Similarity Jump Repo A to B:</b> This column indicates the difference between the similarity percentage of Team A with Team B from current run to previous run.</p>
+                                    <p><b>Shared Code Repo B to A :</b> This column indicates percentage of first team B’s code that is shared with second team A for the current run.</p>
+                                    <p><b>Similarity Jump Repo B to A:</b> This column indicates the difference between the similarity percentage of Team B with Team A from current run to previous run.</p>
                                 </div>
                                 <div>
-                                    <table>
+                                    <table class="center">
                                         <tr>
-                                            <th>Team A</th>
-                                            <th>Similarity percentage of Team A with Team B</th>
-                                            <th>Jump 1</th>
-                                            <th>Team B</th>
-                                            <th>Similarity percentage of Team B with Team A</th>
-                                            <th>Jump 2</th>
+                                            <th>Repo A</th>
+                                            <th>Repo B</th>
+                                            <th>Shared Code Repo A to B</th>
+                                            <th>Shared Code Repo A to B</th>
+                                            <th>Similarity Jump Repo A to B</th>
+                                            <th>Similarity Jump Repo B to A</th>
                                         </tr>
                     """
             for x in jumps:
