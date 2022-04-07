@@ -50,7 +50,7 @@ class ChecksController:
         scheduler.add_job(
             func=ChecksController.run,
             trigger="interval",
-            minutes=3,
+            hours=12,
             args=[curr_check.id],
             next_run_time=datetime.now())
 
