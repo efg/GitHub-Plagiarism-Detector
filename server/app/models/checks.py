@@ -133,17 +133,21 @@ class Check(db.Model):
 
         return url
 
+    #This will send an email every run indicating if which team had maximun jumps.
     def send_email(self, jumps, check_id):
+        #getting the required variables to send email
         sender_email = os.getenv('SENDER_EMAIL')
         receiver_email = os.getenv('RECEIVER_EMAIL')
         password = os.getenv('APP_PASSWORD')
 
+        #setting the to, from and subject for the email
         message = MIMEMultipart("alternative")
         message["From"] = sender_email
         message["To"] = receiver_email
         message["Subject"] = "Github Plagiarism Detector - Check " + str(check_id)
-        # Create the plain-text and HTML version of your message
+        # creating  table header and explaiing the columns 
         text = ""
+        #Email format when there is a previous run 
         if jumps:
             html = """\
                     <html>
@@ -185,6 +189,7 @@ class Check(db.Model):
                                             <th>Similarity Jump Repo B to A</th>
                                         </tr>
                     """
+            #creating table rows which will have jump info.
             for x in jumps:
                 html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+"%" + "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3]) + "</td><td class='alnright'>" + str(x[4]) +"%"+ "</td><td class='alnright'>" + str(x[5]) +"%" + "</td></tr>"
 
@@ -195,6 +200,7 @@ class Check(db.Model):
                         </body> 
                     </html>
                 """
+        #Email format when there is no previous run 
         else:
             html = """\
                 <html>
