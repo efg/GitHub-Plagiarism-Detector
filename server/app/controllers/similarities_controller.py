@@ -18,10 +18,18 @@ class SimilaritiesController:
                                                 report_id=report_id,
                                                 repo1=team1,
                                                 repo2=team2).first():
+
+                # Finding previous run within the same check ID and for the same set of teams.
                 prevRun = Similarities.query.filter_by(check_id=check_id, repo1=team1, repo2=team2, report_id=int(report_id)-1).all()
+
+                # Calculate jump by finding the difference between current similarity score and
+                # previous run's similarity score.
                 if prevRun:
                     jump1 = score1 - prevRun[0].dupl_code1
                     jump2 = score2 - prevRun[0].dupl_code2
+
+                    # If the jump is greater than the minimum jump provided in the environment variables,
+                    # then append it to an array.
                     if jump1 >= maxjump or jump2 >= maxjump:
                         jumps.append([team1,team2 ,score1, score2, jump1, jump2])
                 similar = Similarities(
@@ -44,8 +52,12 @@ class SimilaritiesController:
             check_id=check_id).all()
 
         for obj in similarities_obj_list:
+
+            # Finding previous run within the same check ID and for the same set of teams.
             similarities_obj_list_prev = Similarities.query.filter_by(check_id=check_id, repo1=obj.repo1,
                                                                       repo2=obj.repo2, report_id=int(obj.report_id)-1).all()
+
+            # If a previous run exists, then we calculate the similarity jump.
             if similarities_obj_list_prev:
                 if str(obj.report_id) in MOSS_info:
                     MOSS_info[str(obj.report_id)] += [{
@@ -69,6 +81,8 @@ class SimilaritiesController:
                             'similarity_jump2': obj.dupl_code2 - similarities_obj_list_prev[0].dupl_code2
                         }
                     ]
+
+            # If a previous run does not exist, then we update the similarity jump column to N/A.
             else:
                 if str(obj.report_id) in MOSS_info:
                     MOSS_info[str(obj.report_id)] += [{
