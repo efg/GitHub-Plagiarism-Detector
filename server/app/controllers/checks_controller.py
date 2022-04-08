@@ -83,6 +83,7 @@ class ChecksController:
                     if reports:
                         jumps = SimilaritiesController.new(
                             check.id, reports[-1].id, MOSS_info)
+                        # sending email about highest jumps after an check
                         check.send_email(jumps,check_id)
                        
                     else:
