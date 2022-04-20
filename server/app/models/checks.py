@@ -133,7 +133,7 @@ class Check(db.Model):
 
         return url
 
-    #This will send an email every run indicating if which teams had maximun jumps for the current run.
+    #This will send an email every run indicating about maximun jumps(percenatge increased in this run when compared to previous run) for the current run.
     def send_email(self, jumps, check_id):
         #reading the required variables to send email from .env file
         sender_email = os.getenv('SENDER_EMAIL')
