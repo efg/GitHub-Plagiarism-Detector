@@ -133,21 +133,21 @@ class Check(db.Model):
 
         return url
 
-    #This will send an email every run indicating if which team had maximun jumps.
+    #This will send an email every run indicating if which teams had maximun jumps for the current run.
     def send_email(self, jumps, check_id):
-        #getting the required variables to send email
+        #reading the required variables to send email from .env file
         sender_email = os.getenv('SENDER_EMAIL')
         receiver_email = os.getenv('RECEIVER_EMAIL')
         password = os.getenv('APP_PASSWORD')
 
-        #setting the to, from and subject for the email
+        #initialising to, from and subject for the email
         message = MIMEMultipart("alternative")
         message["From"] = sender_email
         message["To"] = receiver_email
         message["Subject"] = "Github Plagiarism Detector - Check " + str(check_id)
-        # creating  table header and explaiing the columns 
         text = ""
-        #Email format when there is a previous run 
+        #Email format when there is a previous run to compare
+        # creating  table header and brief info about each columns 
         if jumps:
             html = """\
                     <html>
