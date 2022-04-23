@@ -1,5 +1,6 @@
 from app import db
 from app.models.similarities import Similarities
+from app.utils.emailer import email_jump_info
 from flask import jsonify
 import os
 
@@ -8,6 +9,8 @@ class SimilaritiesController:
     @staticmethod
     def new(check_id: int, report_id: int, data: list):
         maxjump =  int(os.getenv('MAXIMUM_JUMP_PERCENTAGE'))
+        #initialse jumps list
+        #jumps is a list of highest percentage increase in similarities in current run when compared to previous run
         jumps = []
         print(data)
         for row in data:
@@ -19,17 +22,15 @@ class SimilaritiesController:
                                                 repo1=team1,
                                                 repo2=team2).first():
 
-                # Finding previous run within the same check ID and for the same set of teams.
+                #Find previous run within the same check ID and for the same set of teams.
                 prevRun = Similarities.query.filter_by(check_id=check_id, repo1=team1, repo2=team2, report_id=int(report_id)-1).all()
 
-                # Calculate jump by finding the difference between current similarity score and
-                # previous run's similarity score.
+                # Calculate jump by finding the increase between current similarity score and previous run's similarity score.
                 if prevRun:
                     jump1 = score1 - prevRun[0].dupl_code1
                     jump2 = score2 - prevRun[0].dupl_code2
 
-                    # If the jump is greater than the minimum jump provided in the environment variables,
-                    # then append it to an array.
+                    #If the jump is greater than the minimum jump specified in the .env file, then append it to an jumps list.
                     if jump1 >= maxjump or jump2 >= maxjump:
                         jumps.append([team1,team2 ,score1, score2, jump1, jump2])
                 similar = Similarities(
@@ -39,7 +40,8 @@ class SimilaritiesController:
             else:
                 print(f"\n{team1}, {team2}  data exists!")
         print("\nInside SimilaritiesController data added")
-        return jumps
+        #send email to the instructor about highest jumps after this run
+        email_jump_info(jumps,check_id)
 
     @staticmethod
     def fetch_all_report_infos(parameters):

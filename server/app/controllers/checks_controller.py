@@ -14,6 +14,7 @@ from datetime import datetime
 class ChecksController:
     @staticmethod
     def new(parameters, files=None):
+        hours_between_run = 12
         # See if check name is not duplicate for this course
         if not Check.query.filter_by(name=parameters['name'],
                                      course_id=parameters['course_id']).first():
@@ -50,7 +51,7 @@ class ChecksController:
         scheduler.add_job(
             func=ChecksController.run,
             trigger="interval",
-            hours=12,
+            hours=hours_between_run,
             args=[curr_check.id],
             next_run_time=datetime.now())
 
@@ -81,13 +82,12 @@ class ChecksController:
                     print(MOSS_info)
                     reports = Report.query.filter_by(check_id=check_id).all()
                     if reports:
-                        jumps = SimilaritiesController.new(
+                        SimilaritiesController.new(
                             check.id, reports[-1].id, MOSS_info)
-                        #sending email about highest jumps after each run
-                        check.send_email(jumps,check_id)
+                    
                        
                     else:
-                        raise ValueError("Report does not exists!")
+                        raise ValueError("Report does not exist!")
                 except Exception as e:
                     print("\n\nScraping failed due to ", e)
 
