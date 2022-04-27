@@ -225,7 +225,7 @@ def path_new():
 @app.route('/check/similarities', methods=['get'])
 def fetch_all_report_infos():
     try:
-        MOSS_info = SimilaritiesController.fetch_all_report_infos(request.args)
+        MOSS_info = SimilaritiesController.fetch_all_report_info(request.args)
         # print(MOSS_info)
 
     except Exception as e:

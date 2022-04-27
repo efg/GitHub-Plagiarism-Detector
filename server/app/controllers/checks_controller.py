@@ -9,12 +9,12 @@ from app.controllers.similarities_controller import SimilaritiesController
 from app.utils.scrape import scrape_MOSS_report
 
 from datetime import datetime
+hours_between_runs = 12
 
 
 class ChecksController:
     @staticmethod
     def new(parameters, files=None):
-        hours_between_run = 12
         # See if check name is not duplicate for this course
         if not Check.query.filter_by(name=parameters['name'],
                                      course_id=parameters['course_id']).first():
@@ -51,7 +51,7 @@ class ChecksController:
         scheduler.add_job(
             func=ChecksController.run,
             trigger="interval",
-            hours=hours_between_run,
+            hours=hours_between_runs,
             args=[curr_check.id],
             next_run_time=datetime.now())
 

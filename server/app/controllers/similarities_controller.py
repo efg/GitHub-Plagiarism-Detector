@@ -30,7 +30,7 @@ class SimilaritiesController:
                     jump1 = score1 - prevRun[0].dupl_code1
                     jump2 = score2 - prevRun[0].dupl_code2
 
-                    #If the jump is greater than the minimum jump specified in the .env file, then append it to an jumps list.
+                    #If the jump is greater than the maximum permissible jump specified by the .env file, then append it to the jumps list.
                     if jump1 >= maxjump or jump2 >= maxjump:
                         jumps.append([team1,team2 ,score1, score2, jump1, jump2])
                 similar = Similarities(
@@ -44,7 +44,7 @@ class SimilaritiesController:
         email_jump_info(jumps,check_id)
 
     @staticmethod
-    def fetch_all_report_infos(parameters):
+    def fetch_all_report_info(parameters):
         """returns all info scraped from the MOSS report for given check_id """
         check_id = parameters.get('check_id')
         print('\ninside fetch MOSS infos', check_id)
@@ -61,6 +61,9 @@ class SimilaritiesController:
 
             # If a previous run exists, then we calculate the similarity jump.
             if similarities_obj_list_prev:
+
+                # We are appending information about a run such as the ID, repos being compared, similarity percentage
+                # between repo A to B and vice versa and the similarity jump from previous to current run.
                 if str(obj.report_id) in MOSS_info:
                     MOSS_info[str(obj.report_id)] += [{
                         'report_id': obj.report_id,
@@ -71,6 +74,7 @@ class SimilaritiesController:
                         'similarity_jump1': obj.dupl_code1 - similarities_obj_list_prev[0].dupl_code1,
                         'similarity_jump2': obj.dupl_code2 - similarities_obj_list_prev[0].dupl_code2
                     }]
+
                 else:
                     MOSS_info[str(obj.report_id)] = [
                         {

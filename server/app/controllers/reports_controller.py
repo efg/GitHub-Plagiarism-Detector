@@ -16,6 +16,8 @@ class ReportsController:
         """returns a list of all MOSS run of an assignment """
         check_id = parameters.get('check_id')
         result_list = []
+
+        # Filter all the runs of a check ID in descending order.
         results = Report.query.filter_by(check_id=check_id).order_by(text("reports_id desc"))
         for res in results:
             result_list.append({

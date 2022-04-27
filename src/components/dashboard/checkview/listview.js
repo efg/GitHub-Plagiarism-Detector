@@ -3,11 +3,15 @@ import React, { Component } from "react";
 import "../../dashboard/dashboard.css";
 import StatsView from "./statsview";
 import Heading from "../heading/heading";
+
+// This is a library that helps create bootstrap tables in react with inbuilt pagination and search.
 import { MDBDataTable } from 'mdbreact';
 
 class ListView extends Component {
   constructor(props) {
     super(props);
+
+    // Set the data for the table that lists all the checks for an assignment.
     this.setTableData();
   }
 

@@ -3,7 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
         
-#This will email the instructor after each run listing the maximun jumps (percentage increase in similarities in this run when compared to previous run).
+# This will email the instructor after each run listing the maximum jumps (percentage increase in similarities in the current run when compared to previous run).
 def email_jump_info(jumps: list=None, check_id: int=None)->None:
     #reading the required variables to send email from .env file
     sender_email = os.getenv('SENDER_EMAIL')

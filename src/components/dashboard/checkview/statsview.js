@@ -56,20 +56,6 @@ class StatsView extends Component {
     for (const report_id in info) return report_id;
   }
 
-  getLatestRecords() {
-    let requiredKeys = Object.keys(this.state.moss_info);
-    requiredKeys = requiredKeys.slice(-7);
-    let allKeys = Object.keys(this.state.moss_info);
-    for (const key in allKeys) {
-      if (!requiredKeys.includes(allKeys[key])) {
-        delete this.state.moss_info[allKeys[key]];
-      }
-    }
-    this.setState({moss_info: this.state.moss_info});
-    this.setState({key: this.getAKey(this.state.moss_info)});
-    this.setData();
-  }
-
   setData() {
     const dataObject = {columns: [{label: 'Run ID', field: 'runid', sort: 'desc', width: 100},
     {label: 'Repo A', field: 'repo_a', sort: 'asc', width: 100},
@@ -97,6 +83,8 @@ class StatsView extends Component {
     });
       }
     }
+
+    // Sort the rows in descending order of runid.
     dataObject.rows.sort((a, b) => parseFloat(b['runid']) - parseFloat(a['runid']));
   this.setState({moss_info: dataObject});
   }
