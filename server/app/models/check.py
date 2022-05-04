@@ -9,7 +9,7 @@ from app.utils.directories import extract_files_from_dir
 from app.utils.languages import get_file_extensions
 from dotenv import load_dotenv
 
-from app.models.submissions import Submission
+from app.models.submission import Submission
 
 load_dotenv()
 

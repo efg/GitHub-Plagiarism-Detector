@@ -1,5 +1,5 @@
 from app import db
-from app.models.similarities import Similarities
+from app.models.similarity import Similarities
 
 # Extract and store all the information from the MOSS report for each run 
 class SimilaritiesController:

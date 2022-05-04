@@ -1,6 +1,6 @@
 from app import db
-from app.models.courses import Course
-from app.models.users import User
+from app.models.course import Course
+from app.models.user import User
 
 class CourseController:
     @staticmethod

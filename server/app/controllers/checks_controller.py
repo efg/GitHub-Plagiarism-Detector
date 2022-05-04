@@ -1,6 +1,6 @@
 from app import db, scheduler
-from app.models.checks import Check
-from app.models.reports import Report
+from app.models.check import Check
+from app.models.report import Report
 
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController

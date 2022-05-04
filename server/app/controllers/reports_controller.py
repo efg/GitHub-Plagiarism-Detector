@@ -1,5 +1,5 @@
 from app import db
-from app.models.reports import Report
+from app.models.report import Report
 from sqlalchemy import text
 
 # Shows all of the MoSS runs on the assignment

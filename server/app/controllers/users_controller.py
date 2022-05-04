@@ -1,5 +1,5 @@
 from app import db
-from app.models.users import User
+from app.models.user import User
 
 # Create a new user then store in DB
 class UserController:

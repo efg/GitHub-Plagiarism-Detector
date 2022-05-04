@@ -1,6 +1,6 @@
 from app import db
 import os
-from app.models.similarities import Similarities
+from app.models.similarity import Similarities
 from app.utils.emailer import email_jump_info
 
 
