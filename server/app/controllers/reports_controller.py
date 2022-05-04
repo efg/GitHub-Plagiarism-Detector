@@ -17,7 +17,7 @@ class ReportsController:
         check_id = parameters.get('check_id')
         result_list = []
 
-        # Filter all the runs of a check ID in descending order.
+        # For a particular check ID, arrange all the runs in descending order.
         results = Report.query.filter_by(check_id=check_id).order_by(text("reports_id desc"))
         for res in results:
             result_list.append({

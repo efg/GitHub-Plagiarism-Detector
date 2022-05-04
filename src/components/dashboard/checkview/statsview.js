@@ -20,7 +20,7 @@ class StatsView extends Component {
       .then((res) => {
         this.setState({ moss_info: res.data.payload });
         this.setState({ loading: false });
-        this.setData();
+        this.setSimilarityData();
       })
       .catch((error) => {
         console.log(error);
@@ -56,7 +56,7 @@ class StatsView extends Component {
     for (const report_id in info) return report_id;
   }
 
-  setData() {
+  setSimilarityData() {
     const dataObject = {columns: [{label: 'Run ID', field: 'runid', sort: 'desc', width: 100},
     {label: 'Repo A', field: 'repo_a', sort: 'asc', width: 100},
     {label: 'Repo B', field: 'repo_b', sort: 'asc', width: 100},
