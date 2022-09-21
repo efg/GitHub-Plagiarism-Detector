@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
 import Heading from "../heading/heading";
+import { MDBDataTable } from 'mdbreact';
 
 class StatsView extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class StatsView extends Component {
       moss_info: {},
       loading: true,
       key: -1,
-    };
+    };    
   }
 
   get_MOSS_info(check_id) {
@@ -18,7 +19,8 @@ class StatsView extends Component {
       .get(`/check/similarities?check_id=${check_id}`)
       .then((res) => {
         this.setState({ moss_info: res.data.payload });
-        this.setState({ loading: false, key: this.getAKey(res.data.payload) });
+        this.setState({ loading: false });
+        this.setSimilarityData();
       })
       .catch((error) => {
         console.log(error);
@@ -54,6 +56,39 @@ class StatsView extends Component {
     for (const report_id in info) return report_id;
   }
 
+  setSimilarityData() {
+    const dataObject = {columns: [{label: 'Run ID', field: 'runid', sort: 'desc', width: 100},
+    {label: 'Repo A', field: 'repo_a', sort: 'asc', width: 100},
+    {label: 'Repo B', field: 'repo_b', sort: 'asc', width: 100},
+    {label: 'Shared Code Repo A to B', field: 'share_a_to_b', sort: 'asc', width: 100},
+    {label: 'Shared Code Repo B to A', field: 'share_b_to_a', sort: 'asc', width: 100},
+    {label: 'Similarity Jump Repo A to B', field: 'jump_a_to_b', sort: 'asc', width: 100},
+    {label: 'Similarity Jump Repo B to A', field: 'jump_b_to_a', sort: 'asc', width: 100}],
+    rows: []};
+    let allKeys = Object.keys(this.state.moss_info);
+    for (const key in allKeys) {
+      for (const run in this.state.moss_info[allKeys[key]]) {
+        dataObject.rows.push({'runid': allKeys[key], 
+        'repo_a': this.state.moss_info[allKeys[key]][run]['repo1'],
+        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'], 
+        'share_a_to_b': `${this.state.moss_info[allKeys[key]][run]['dupl_code1']}%`,
+      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`, 
+      'jump_a_to_b': this.state.moss_info[allKeys[key]][run]['similarity_jump1'] != 'N/A' ? 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}%` : 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}`,
+      'jump_b_to_a': this.state.moss_info[allKeys[key]][run]['similarity_jump2'] != 'N/A' ? 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}%` : 
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}`,
+    
+    });
+      }
+    }
+
+    // Sort the rows in descending order of runid.
+    dataObject.rows.sort((a, b) => parseFloat(b['runid']) - parseFloat(a['runid']));
+  this.setState({moss_info: dataObject});
+  }
+
   getTeamInfo(info, teamNo) {
     return (
       <div style={{ flexDirection: "column" }} className="col">
@@ -75,7 +110,8 @@ class StatsView extends Component {
               }
               key={k}
             >
-              {teamNo === 1 ? obj.dupl_code1 : obj.dupl_code2}
+              {obj.dupl_code1}% &emsp;
+              {obj.dupl_code2}%
             </div>
           ))}
       </div>
@@ -97,80 +133,20 @@ class StatsView extends Component {
         <div id="stats-view" className="container">
           <Heading
             title={"Statistics"}
-            value={""}
+            value={"In the table below we are comparing each repo with every other repo and calculating the similarity percentage from Repo A to B and Repo B to A. We are also calculating the similarity percentage jump from the last run to current run. You will notice that the first run has similarity percentage jump as N/A since we do not have a previous run to compare with."}
             isBack={true}
             onBackPress={this.props.onBackPress}
           />
 
-          <div className="row justify-content-md-center">
-            <div className="col-2">
-              <label>
-                <strong>Team Names</strong>
-              </label>
-              <div style={{ flexDirection: "column" }} className="row">
-                <div className="row">
-                  <div style={{ color: "#5f6368" }} className="col">
-                    <b>Team</b>
-                  </div>
-                  <div style={{ color: "#5f6368" }} className="col">
-                    <b>Report#</b>
-                  </div>
-                </div>
-
-                {this.state.moss_info &&
-                  this.state.moss_info[this.state.key] &&
-                  this.state.moss_info[this.state.key].map((info, k) =>
-                    this.getTeamName(info, k)
-                  )}
-              </div>
-            </div>
-            <div className="col-5">
-              <label>
-                <strong>
-                  Shared Code
-                  <a data-tip="% of first team’s code that is shared with second team">
-                    ❓
-                  </a>
-                  <ReactTooltip place="top" type="info" effect="solid" />
-                </strong>
-              </label>
-              <div style={{ flexDirection: "row" }} className="row">
-                {this.state.moss_info &&
-                  Object.keys(this.state.moss_info).map((key, i) => (
-                    <div>
-                      <div style={{ color: "#5f6368" }} className="col">
-                        <b>{key}</b>
-                      </div>
-                      {this.getTeamInfo(this.state.moss_info[key], 1)}
-                    </div>
-                  ))}
-              </div>
-            </div>
-
-            <div className="col-5">
-              <label>
-                <strong>
-                  Shared Code
-                  <a data-tip="% of second team’s code that is shared with first team">
-                    ❓
-                  </a>
-                  <ReactTooltip place="top" type="info" effect="solid" />
-                </strong>
-              </label>
-              <div style={{ flexDirection: "row" }} className="row">
-                {this.state.moss_info &&
-                  Object.keys(this.state.moss_info).map((key, i) => (
-                    <div>
-                      <div style={{ color: "#5f6368" }} className="col">
-                        <b>{key}</b>
-                      </div>
-                      {this.getTeamInfo(this.state.moss_info[key], 2)}
-                    </div>
-                  ))}
-              </div>
-            </div>
           </div>
-        </div>
+        <MDBDataTable
+      scrollX
+      responsive
+      striped
+      bordered
+      order={['runid', 'desc']}
+      data={this.state.moss_info}
+    />
       </>
     );
   }

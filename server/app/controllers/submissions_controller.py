@@ -1,8 +1,8 @@
 from app import db
-from app.models.submissions import Submission
+from app.models.submission import Submission
 from app.utils.csv_parser import parse
-from app.models.checks import Check
-from app.models.paths import Path
+from app.models.check import Check
+from app.models.path import Path
 
 # Read and store all the infomation from user input as well as CSV files then 
 # clone all repos to run MOSS later

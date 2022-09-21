@@ -1,8 +1,8 @@
 from app import db
-from app.models.courses import Course
+from app.models.course import Course
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)

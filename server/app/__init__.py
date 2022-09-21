@@ -23,7 +23,7 @@ def get_app(Config=None):
     Migrate(app,db)
     scheduler.start()
     
-    from app.models import users, courses, submissions, checks, paths
+    from app.models import user, course, submission, check, path
 
     return app
     

@@ -1,6 +1,6 @@
 from app import db, scheduler
-from app.models.checks import Check
-from app.models.reports import Report
+from app.models.check import Check
+from app.models.report import Report
 
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
@@ -14,6 +14,7 @@ from datetime import datetime
 class ChecksController:
     @staticmethod
     def new(parameters, files=None):
+        hours_between_run = 12
         # See if check name is not duplicate for this course
         if not Check.query.filter_by(name=parameters['name'],
                                      course_id=parameters['course_id']).first():
@@ -50,7 +51,7 @@ class ChecksController:
         scheduler.add_job(
             func=ChecksController.run,
             trigger="interval",
-            hours=1,
+            hours=hours_between_run,
             args=[curr_check.id],
             next_run_time=datetime.now())
 
@@ -63,7 +64,7 @@ class ChecksController:
             report = ReportsController.new(check_id, datetime.now(), "")
             directories = check.download_submissions(check_id)
             url = check.run_check(check.language, directories)
-            # check.remove_submissions()
+            check.remove_submissions()
             # url = "http://moss.stanford.edu/results/0/8842422701801"  # TODO: remove this line
             print("\n\n >>> Run end", url)
 
@@ -76,14 +77,17 @@ class ChecksController:
                 # pass this url for scraping and print result
                 try:
                     # get info by scrpaing the MOSS report
+                    html = ""
                     MOSS_info = scrape_MOSS_report(url)
                     print(MOSS_info)
                     reports = Report.query.filter_by(check_id=check_id).all()
                     if reports:
+                        #calculate and send email to the instructor about highest jumps after this run
+                        report.calculateJumps(check.id, reports[-1].id, MOSS_info)
                         SimilaritiesController.new(
                             check.id, reports[-1].id, MOSS_info)
                     else:
-                        raise ValueError("Report does not exists!")
+                        raise ValueError("Report does not exist!")
                 except Exception as e:
                     print("\n\nScraping failed due to ", e)
 
@@ -123,3 +127,4 @@ class ChecksController:
             db.session.commit()
             return ChecksController.show_checks({'course_id': course_id})
         return []
+
