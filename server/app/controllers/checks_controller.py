@@ -12,6 +12,7 @@ from datetime import datetime
 
 
 class ChecksController:
+
     @staticmethod
     def new(parameters, files=None):
         hours_between_run = 12
@@ -82,10 +83,11 @@ class ChecksController:
                     print(MOSS_info)
                     reports = Report.query.filter_by(check_id=check_id).all()
                     if reports:
-                        #calculate and send email to the instructor about highest jumps after this run
-                        report.calculateJumps(check.id, reports[-1].id, MOSS_info)
                         SimilaritiesController.new(
                             check.id, reports[-1].id, MOSS_info)
+                        #calculate and send email to the instructor about highest jumps after this run
+                        report.calculateJumps(check.id, reports[-1].id, MOSS_info)
+                        
                     else:
                         raise ValueError("Report does not exist!")
                 except Exception as e:
