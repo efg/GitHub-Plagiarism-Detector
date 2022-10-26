@@ -12,7 +12,6 @@ from datetime import datetime
 
 
 class ChecksController:
-
     @staticmethod
     def new(parameters, files=None):
         hours_between_run = 12
@@ -49,17 +48,19 @@ class ChecksController:
             'header': parameters['header']},
             files)
 
-        scheduler.add_job(
-            func=ChecksController.run,
-            trigger="interval",
-            hours=hours_between_run,
-            args=[curr_check.id],
-            next_run_time=datetime.now())
+        # scheduler.add_job(
+        #     func=ChecksController.run,
+        #     trigger="interval",
+        #     hours=hours_between_run,
+        #     args=[curr_check.id],
+        #     next_run_time=datetime.now())
 
     @staticmethod
     def run(check_id):
         # Download the latest submissions
         check = Check.query.filter_by(id=check_id).first()
+        #ChecksController.disable_check(check_id)
+        #ChecksController.enable_check(check_id)
         print("\n\nInside check run:  ", check_id)
         if check:
             report = ReportsController.new(check_id, datetime.now(), "")
@@ -87,7 +88,7 @@ class ChecksController:
                             check.id, reports[-1].id, MOSS_info)
                         #calculate and send email to the instructor about highest jumps after this run
                         report.calculateJumps(check.id, reports[-1].id, MOSS_info)
-                        
+
                     else:
                         raise ValueError("Report does not exist!")
                 except Exception as e:
@@ -129,4 +130,33 @@ class ChecksController:
             db.session.commit()
             return ChecksController.show_checks({'course_id': course_id})
         return []
+
+    @staticmethod
+    def enable_check(parameters):
+        print("\n inside enable check", parameters)
+        #check_id = parameters.get('check_id')
+        check_id = parameters
+        #course_id = parameters.get('course_id')
+        # Mark the check as not visible
+        check = Check.query.filter_by(id=check_id,
+                                      visibility="yes").first()
+        print("\n->", check)
+        if check:
+            check.is_active = True
+            db.session.commit()
+
+    @staticmethod
+    def disable_check(parameters):
+        print("\n inside disable check", parameters)
+        #check_id = parameters.get('check_id')
+        check_id = parameters
+        #course_id = parameters.get('course_id')
+        # Mark the check as not visible
+        check = Check.query.filter_by(id=check_id,
+                                      visibility="yes").first()
+        print("\n->", check)
+        if check:
+            check.is_active = False
+            db.session.commit()
+
 
