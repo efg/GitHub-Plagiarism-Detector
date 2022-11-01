@@ -171,6 +171,50 @@ def delete_check():
         return make_response('Server Error'), 500
 
     return make_response('Success', list_checks), 200
+
+
+# Enable a disabled check
+@app.route('/check/enable', methods=['get'])
+def enable_check():
+    print(request.args)
+    try:
+        ChecksController.enable_check(request.args)
+    except (ValueError, KeyError) as e:
+        print(e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', True), 200
+
+# Disable a check
+@app.route('/check/disable', methods=['get'])
+def disable_check():
+    print(request.args)
+    try:
+        ChecksController.disable_check(request.args)
+    except (ValueError, KeyError) as e:
+        print(e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', True), 200
+
+# Get status of the Check
+@app.route('/check/status', methods=['get'])
+def status_check():
+    print(request.args)
+    try:
+        status = ChecksController.get_status(request.args)
+    except (ValueError, KeyError) as e:
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', status), 200
+
+
 # ----------------------Reports------------------------
 # Get reports for a check id
 

@@ -11,7 +11,7 @@ class StatsView extends Component {
       moss_info: {},
       loading: true,
       key: -1,
-    };    
+    };
   }
 
   get_MOSS_info(check_id) {
@@ -68,18 +68,18 @@ class StatsView extends Component {
     let allKeys = Object.keys(this.state.moss_info);
     for (const key in allKeys) {
       for (const run in this.state.moss_info[allKeys[key]]) {
-        dataObject.rows.push({'runid': allKeys[key], 
+        dataObject.rows.push({'runid': allKeys[key],
         'repo_a': this.state.moss_info[allKeys[key]][run]['repo1'],
-        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'], 
+        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'],
         'share_a_to_b': `${this.state.moss_info[allKeys[key]][run]['dupl_code1']}%`,
-      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`, 
-      'jump_a_to_b': this.state.moss_info[allKeys[key]][run]['similarity_jump1'] != 'N/A' ? 
-      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}%` : 
+      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`,
+      'jump_a_to_b': this.state.moss_info[allKeys[key]][run]['similarity_jump1'] != 'N/A' ?
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}%` :
       `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}`,
-      'jump_b_to_a': this.state.moss_info[allKeys[key]][run]['similarity_jump2'] != 'N/A' ? 
-      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}%` : 
+      'jump_b_to_a': this.state.moss_info[allKeys[key]][run]['similarity_jump2'] != 'N/A' ?
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}%` :
       `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}`,
-    
+
     });
       }
     }
@@ -134,7 +134,7 @@ class StatsView extends Component {
           <Heading
             title={"Statistics"}
             value={"In the table below we are comparing each repo with every other repo and calculating the similarity percentage from Repo A to B and Repo B to A. We are also calculating the similarity percentage jump from the last run to current run. You will notice that the first run has similarity percentage jump as N/A since we do not have a previous run to compare with."}
-            isBack={true}
+            isBack={false}
             onBackPress={this.props.onBackPress}
           />
 

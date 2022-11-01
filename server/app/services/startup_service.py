@@ -24,10 +24,11 @@ class StartUpService:
             scheduler.add_job(
                 func=ChecksController.run,
                 trigger="interval",
-                minutes=5,
+                hours=12,
                 start_date=start_date, 
                 end_date=end_date+timedelta(days=offset),
                 args=[entry.id],
+                id=str(entry.id),
                 next_run_time=datetime.now())
 
             

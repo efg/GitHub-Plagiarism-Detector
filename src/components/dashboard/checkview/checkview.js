@@ -23,6 +23,7 @@ class CheckView extends Component {
       header: "",
       tabView: false,
       tabData: [],
+      status: false,
     };
 
     this.getCard = this.getCard.bind(this);
@@ -54,6 +55,18 @@ class CheckView extends Component {
   }
 
   async getReports(check_id, check_name) {
+
+    await axios
+      .get("/check/status?check_id=" + check_id)
+      .then((res) => {
+        this.setState({
+          status: res.data["payload"]["status"]
+        });
+      })
+      .catch((error) => {
+        console.log(error["message"]);
+      });
+
     await axios
       .get("/report/list?check_id=" + check_id)
       .then((res) => {
@@ -150,6 +163,7 @@ class CheckView extends Component {
           check_name={this.state.name}
           check_id={this.state.check_id}
           tabRows={this.state.tabData}
+          isEnable={this.state.status}
           onBackPress={this.hideTabView}
         />
       );

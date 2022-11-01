@@ -1,6 +1,9 @@
 from app import db, scheduler
+from datetime import datetime, timedelta
 from app.models.check import Check
 from app.models.report import Report
+
+import os
 
 from app.controllers.submissions_controller import SubmissionController
 from app.controllers.reports_controller import ReportsController
@@ -12,9 +15,26 @@ from datetime import datetime
 
 
 class ChecksController:
+
+    @staticmethod
+    def schedule_job(start_date, end_date, check_id, hours_between_run=12, offset=5):
+        scheduler.add_job(
+            func=ChecksController.run,
+            trigger="interval",
+            hours=hours_between_run,
+            args=[check_id],
+            id=str(check_id),
+            end_date=end_date + timedelta(days=offset),
+            next_run_time=start_date)
+    
+    @staticmethod
+    def remove_scheduled_job(check_id):
+        jobs = scheduler.get_jobs()
+        print(jobs)
+        scheduler.remove_job(str(check_id))
+
     @staticmethod
     def new(parameters, files=None):
-        hours_between_run = 12
         # See if check name is not duplicate for this course
         if not Check.query.filter_by(name=parameters['name'],
                                      course_id=parameters['course_id']).first():
@@ -48,11 +68,15 @@ class ChecksController:
             'header': parameters['header']},
             files)
 
+        ChecksController.schedule_job(datetime.now(), curr_check.end_date, curr_check.id,)
+
         # scheduler.add_job(
         #     func=ChecksController.run,
         #     trigger="interval",
         #     hours=hours_between_run,
         #     args=[curr_check.id],
+        #     id=curr_check.id,
+        #     end_date=curr_check.end_date + timedelta(days=offset),
         #     next_run_time=datetime.now())
 
     @staticmethod
@@ -113,6 +137,7 @@ class ChecksController:
             checks_list.append({'id': check.id,
                                 'name': check.name,
                                 'language': check.language,
+                                'is_active': check.is_active,
                                 'start_date': check.start_date.date()})
         return checks_list
 
@@ -133,30 +158,35 @@ class ChecksController:
 
     @staticmethod
     def enable_check(parameters):
-        print("\n inside enable check", parameters)
-        #check_id = parameters.get('check_id')
-        check_id = parameters
-        #course_id = parameters.get('course_id')
-        # Mark the check as not visible
+        check_id = parameters.get('check_id')
         check = Check.query.filter_by(id=check_id,
                                       visibility="yes").first()
-        print("\n->", check)
         if check:
-            check.is_active = True
-            db.session.commit()
+            if not check.is_active:
+                check.is_active = True
+                db.session.commit()
+                ChecksController.schedule_job(datetime.now(), check.end_date, check_id,)
+                
 
     @staticmethod
     def disable_check(parameters):
         print("\n inside disable check", parameters)
-        #check_id = parameters.get('check_id')
-        check_id = parameters
-        #course_id = parameters.get('course_id')
-        # Mark the check as not visible
+        check_id = parameters.get('check_id')
         check = Check.query.filter_by(id=check_id,
                                       visibility="yes").first()
-        print("\n->", check)
         if check:
-            check.is_active = False
-            db.session.commit()
+            if check.is_active:
+                check.is_active = False
+                db.session.commit()
+                ChecksController.remove_scheduled_job(check_id)
+
+    @staticmethod
+    def get_status(parameters):
+        check_id = parameters.get('check_id')
+        check = Check.query.filter_by(id=check_id,
+                                      visibility="yes").first()
+        if check:
+            return {"status": check.is_active}
+        raise Exception("CheckId not found")
 
 
