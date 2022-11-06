@@ -70,15 +70,6 @@ class ChecksController:
 
         ChecksController.schedule_job(datetime.now(), curr_check.end_date, curr_check.id,)
 
-        # scheduler.add_job(
-        #     func=ChecksController.run,
-        #     trigger="interval",
-        #     hours=hours_between_run,
-        #     args=[curr_check.id],
-        #     id=curr_check.id,
-        #     end_date=curr_check.end_date + timedelta(days=offset),
-        #     next_run_time=datetime.now())
-
     @staticmethod
     def run(check_id):
         # Download the latest submissions

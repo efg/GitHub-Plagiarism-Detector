@@ -21,15 +21,7 @@ class StartUpService:
             if(today > end_date and today < start_date):
                 continue
             
-            scheduler.add_job(
-                func=ChecksController.run,
-                trigger="interval",
-                hours=12,
-                start_date=start_date, 
-                end_date=end_date+timedelta(days=offset),
-                args=[entry.id],
-                id=str(entry.id),
-                next_run_time=datetime.now())
+            ChecksController.schedule_job(datetime.now(), end_date, entry.id,)
 
             
 
