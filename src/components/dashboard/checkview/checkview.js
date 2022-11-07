@@ -100,6 +100,10 @@ class CheckView extends Component {
       .catch((error) => {
         console.log(error["message"]);
       });
+
+      // Notify and reload the page.
+      alert("The check has been deleted.");
+      window.location.reload(false);
   }
 
   hideTabView() {
