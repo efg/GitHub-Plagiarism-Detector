@@ -84,8 +84,14 @@ class StatsView extends Component {
       }
     }
 
-    // Sort the rows in descending order of runid.
-    dataObject.rows.sort((a, b) => parseFloat(b['runid']) - parseFloat(a['runid']));
+    /* Sort the rows in descending order of runid. If the runId is the same,
+    then sort the rows in descending order of similarity jump from Repo A to B. */
+    dataObject.rows.sort((a, b) => {
+      if(b['runid'] !== a['runid'])
+        return parseFloat(b['runid']) - parseFloat(a['runid']);
+        // slice() is used to remove the % character from the end of the string
+      return b['jump_a_to_b'].slice(0,-1) - a['jump_a_to_b'].slice(0,-1);
+    });
   this.setState({moss_info: dataObject});
   }
 
