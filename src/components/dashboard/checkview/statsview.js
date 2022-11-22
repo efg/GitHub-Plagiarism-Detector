@@ -14,6 +14,22 @@ class StatsView extends Component {
     };
   }
 
+  downloadReport(check_id) {
+    axios
+      .get(`/check/download?check_id=${check_id}`, {responseType : 'blob'})
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'report.xls');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   get_MOSS_info(check_id) {
     axios
       .get(`/check/similarities?check_id=${check_id}`)
@@ -145,6 +161,19 @@ class StatsView extends Component {
           />
 
           </div>
+
+          <div className="row">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                this.downloadReport(this.props.check_id);
+              }}
+            >
+              Download Report
+            </button>
+          </div>
+
         <MDBDataTable
       scrollX
       responsive

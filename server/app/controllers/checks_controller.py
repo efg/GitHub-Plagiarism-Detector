@@ -2,6 +2,7 @@ from app import db, scheduler
 from datetime import datetime, timedelta
 from app.models.check import Check
 from app.models.report import Report
+from pyexcel_xls import save_data
 
 import os
 
@@ -12,9 +13,44 @@ from app.controllers.similarities_controller import SimilaritiesController
 from app.utils.scrape import scrape_MOSS_report
 
 from datetime import datetime
+from collections import OrderedDict
 
 
 class ChecksController:
+
+    @staticmethod
+    def download_check_details(parameters):
+        check_id = parameters.get('check_id')
+        moss_info = SimilaritiesController.get_moss_info(check_id=check_id)
+        data = []
+        for _, reports in moss_info.items():
+            for report in reports:
+                run_id = int(report['report_id'])
+                repo_a = report['repo1']
+                repo_b = report['repo2']
+                shared_code_a_to_b = str(int(report['dupl_code1'])) + "%"
+                shared_code_b_to_a = str(int(report['dupl_code2'])) + "%"
+                similarity_jump_a_to_b = report['similarity_jump1']
+                similarity_jump_b_to_a = report['similarity_jump2']
+
+                list = [run_id, repo_a, repo_b, shared_code_a_to_b, shared_code_b_to_a, similarity_jump_a_to_b, similarity_jump_b_to_a] 
+
+                data.append(list)
+        sorted(data, key=lambda x:x[0], reverse=True)
+        data.insert(0, ["Run ID", "Team A", "Team B", "Shared Code Repo A to B", "Shared Code Repo B to A", "Similarity Jump Repo A to B", "Similarity Jump Repo B to A"])
+        data_to_csv = OrderedDict()
+        data_to_csv.update({"Sheet 1": data})
+
+        file_path = os.path.join(os.path.dirname(
+            os.path.realpath('__file__')), 'app/files/',)
+        file_name = "report.xls"
+
+        save_data(file_path + file_name, data)
+
+        return file_path, file_name
+
+
+
 
     @staticmethod
     def schedule_job(start_date, end_date, check_id, hours_between_run=12, offset=5):
