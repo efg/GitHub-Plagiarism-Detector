@@ -17,6 +17,12 @@ class SubmissionController:
 
         for csv_name, csv_obj in param_files.to_dict().items():
             csv_entries = parse(csv_obj, parameters['header'])
+            iteration = int(24/int(parameters['interval']))
+            num_of_submissions = len(csv_entries) * iteration
+
+            if num_of_submissions > 100:
+                raise ValueError("\n>>>Submission count exceeds the threshold. Please limit the number of submissions to 100 per day.")
+
             
             if csv_name == "csvFile":
                 for curr_team, curr_url  in csv_entries:

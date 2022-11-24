@@ -101,7 +101,8 @@ class ChecksController:
 
         SubmissionController.new({
             'check_id': curr_check.id,
-            'header': parameters['header']},
+            'header': parameters['header'],
+            'interval': parameters['interval']},
             files)
 
         ChecksController.schedule_job(datetime.now(), curr_check.end_date, curr_check.id,)
