@@ -90,6 +90,9 @@ class CheckModal extends Component {
                 <label htmlFor="interval">
                   Interval between two consecutive checks (in hrs.)
                 </label>
+                <div class="alert alert-warning" role="alert">
+                  Only 100 submissions/day/user are allowed. Please select an interval based on this limitation.
+                </div>
                 <input
                   className="form-control"
                   type="number"
