@@ -35,6 +35,21 @@ Note: This project uses MOSS software by Standford Univerity
 
 `pip install -r requirements.txt`
 
+Create a .env file in the server directory and add the following:
+```
+DB_SERVER = localhost:5432
+DB_USER = username
+DB_PASSWORD = admin
+DB_NAME = gpd_dev
+MOSS_USER_ID = moss_id
+SENDER_EMAIL = email
+RECEIVER_EMAIL = email
+APP_PASSWORD = email_password 
+MAXIMUM_JUMP_PERCENTAGE = 50 
+```
+Make the necessary changes based on your system configurations.
+
+Create directories `app/files` in the project directory.
 
 <b> > Front End </b>
 
