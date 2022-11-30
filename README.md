@@ -53,7 +53,7 @@ Create directories `app/files` in the project directory.
 
 <b> > Front End </b>
 
-Install Npm, React 
+Install [Npm](https://nodejs.org/en/download/), [React](https://www.freecodecamp.org/news/install-react-with-create-react-app/) 
 
 <b> > Postgres</b> 
 
