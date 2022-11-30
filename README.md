@@ -72,7 +72,7 @@ Enter  `psql postgres` to get started
 Some handy command for Postgres
 
 - `CREATE DATABASE gpd_dev;`
-- Dump .pgsql into DB `psql gpd_dev < /Users/spawar2/Desktop/GitHub-Plagiarism-Detector/server/database.sql`
+- Dump .pgsql into DB `psql gpd_dev < ./GitHub-Plagiarism-Detector/server/database.sql`
 
 
 Useful commands in psql command line 
