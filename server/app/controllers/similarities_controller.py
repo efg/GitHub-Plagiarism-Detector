@@ -23,11 +23,7 @@ class SimilaritiesController:
         print("\nInside SimilaritiesController data added")
 
     @staticmethod
-    def fetch_all_report_info(parameters):
-        """returns all info scraped from the MOSS report for given check_id """
-        check_id = parameters.get('check_id')
-        print('\ninside fetch MOSS infos', check_id)
-
+    def get_moss_info(check_id: int):
         MOSS_info = {}
         similarities_obj_list = Similarities.query.filter_by(
             check_id=check_id).all()
@@ -93,4 +89,13 @@ class SimilaritiesController:
                     ]
 
         # print(MOSS_info)
+        return MOSS_info
+
+    @staticmethod
+    def fetch_all_report_info(parameters):
+        """returns all info scraped from the MOSS report for given check_id """
+        check_id = parameters.get('check_id')
+        print('\ninside fetch MOSS infos', check_id)
+
+        MOSS_info = SimilaritiesController.get_moss_info(check_id)
         return MOSS_info

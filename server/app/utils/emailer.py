@@ -9,6 +9,7 @@ def email_jump_info(jumps: list=None, check_id: int=None)->None:
     sender_email = os.getenv('SENDER_EMAIL')
     receiver_email = os.getenv('RECEIVER_EMAIL')
     password = os.getenv('APP_PASSWORD')
+    max_jump = int(os.getenv('MAXIMUM_JUMP_PERCENTAGE'))
 
     #initialising to, from and subject for the email
     message = MIMEMultipart("alternative")
@@ -24,26 +25,18 @@ def email_jump_info(jumps: list=None, check_id: int=None)->None:
                     <head>
                         <style> 
                             table, th, td {
-                                border: 1px solid white;
+                                border: 1px solid black;
                                 border-collapse: collapse;
-                            }
-                            th, td {
-                                background-color: #96D4D4;
+                                padding-top: 5px;
+                                padding-bottom: 5px;
+                                padding-left: 5px;
+                                padding-right: 5px;
                             }
                             .alnright { text-align: right; }
                         </style>
                     </head>
                     <body>
                         <div>
-                            <div>
-                                <p><b>Below table indicates the top jumps for this check </b> </p>
-                                <p><b>NOTE:</b></p>
-                                <p><b>Repo A and Repo B :</b> These two columns indicate the team names whose code is being checked.</p>
-                                <p><b>Shared Code Repo A to B :</b> This column indicates percentage of first team A’s code that is shared with second team B for the current run.</p>
-                                <p><b>Similarity Jump Repo A to B:</b> This column indicates the difference between the similarity percentage of Team A with Team B from current run to previous run.</p>
-                                <p><b>Shared Code Repo B to A :</b> This column indicates percentage of first team B’s code that is shared with second team A for the current run.</p>
-                                <p><b>Similarity Jump Repo B to A:</b> This column indicates the difference between the similarity percentage of Team B with Team A from current run to previous run.</p>
-                            </div>
                             <div>
                                 <table>
                                     <tr>
@@ -57,10 +50,51 @@ def email_jump_info(jumps: list=None, check_id: int=None)->None:
                 """
         #creating table rows which will have jump info.
         for x in jumps:
-            html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+ "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3])+ "%"  + "</td><td class='alnright'>" + str(x[4]) +"%"+ "</td><td class='alnright'>" + str(x[5]) +"%" + "</td></tr>"
+            if x[4] > max_jump and x[5] > max_jump:
+                html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+ "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3])+ "%"  + "</td><td class='alnright' style='color:#ea0b22'>" + str(x[4]) +"%"+ "</td><td class='alnright' style='color:#ea0b22'>" + str(x[5]) +"%" + "</td></tr>"
+            elif x[4] > max_jump:
+                html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+ "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3])+ "%"  + "</td><td class='alnright' style='color:#ea0b22'>" + str(x[4]) +"%"+ "</td><td class='alnright'>" + str(x[5]) +"%" + "</td></tr>"
+            elif x[5] > max_jump:
+                html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+ "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3])+ "%"  + "</td><td class='alnright'>" + str(x[4]) +"%"+ "</td><td class='alnright' style='color:#ea0b22'>" + str(x[5]) +"%" + "</td></tr>"
+            else:
+                html += "<tr><td class='alnright'>" + str(x[0]) + "</td><td class='alnright'>" + str(x[1])+ "</td><td class='alnright'>" + str(x[2])+"%" + "</td><td class='alnright'>" + str(x[3])+ "%"  + "</td><td class='alnright'>" + str(x[4]) +"%"+ "</td><td class='alnright'>" + str(x[5]) +"%" + "</td></tr>"
 
         html += """\
                                 </table>
+                            </div>
+                            <div>
+                                <p><b>NOTE:</b></p>
+                                <table>
+                                    <tr>
+                                    <th>Column Name</th>
+                                    <th>Description</th>
+                                    </tr>
+                                    <tr>
+                                    <td>Repo A</td>
+                                    <td>Code of Team A being checked</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Repo B</td>
+                                        <td>Code of Team B being checked</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shared Code Repo A to B</td>
+                                        <td>Percentage of first team A&apos;s code that is shared with second team B for the current run</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Similarity Jump Repo A to B</td>
+                                        <td>Difference between the similarity percentage of Team A with Team B from current run to previous run</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shared Code Repo B to A</td>
+                                        <td>Percentage of first team B&apos;s code that is shared with second team A for the current run</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Similarity Jump Repo B to A</td>
+                                        <td>Difference between the similarity percentage of Team B with Team A from current run to previous run</td>
+                                    </tr>
+                                </table>
+                                
                             </div>
                         </div>
                     </body> 

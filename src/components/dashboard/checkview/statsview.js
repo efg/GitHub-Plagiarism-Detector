@@ -11,7 +11,23 @@ class StatsView extends Component {
       moss_info: {},
       loading: true,
       key: -1,
-    };    
+    };
+  }
+
+  downloadReport(check_id) {
+    axios
+      .get(`/check/download?check_id=${check_id}`, {responseType : 'blob'})
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'report.xls');
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   get_MOSS_info(check_id) {
@@ -68,24 +84,30 @@ class StatsView extends Component {
     let allKeys = Object.keys(this.state.moss_info);
     for (const key in allKeys) {
       for (const run in this.state.moss_info[allKeys[key]]) {
-        dataObject.rows.push({'runid': allKeys[key], 
+        dataObject.rows.push({'runid': allKeys[key],
         'repo_a': this.state.moss_info[allKeys[key]][run]['repo1'],
-        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'], 
+        'repo_b':this.state.moss_info[allKeys[key]][run]['repo2'],
         'share_a_to_b': `${this.state.moss_info[allKeys[key]][run]['dupl_code1']}%`,
-      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`, 
-      'jump_a_to_b': this.state.moss_info[allKeys[key]][run]['similarity_jump1'] != 'N/A' ? 
-      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}%` : 
+      'share_b_to_a': `${this.state.moss_info[allKeys[key]][run]['dupl_code2']}%`,
+      'jump_a_to_b': this.state.moss_info[allKeys[key]][run]['similarity_jump1'] != 'N/A' ?
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}%` :
       `${this.state.moss_info[allKeys[key]][run]['similarity_jump1']}`,
-      'jump_b_to_a': this.state.moss_info[allKeys[key]][run]['similarity_jump2'] != 'N/A' ? 
-      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}%` : 
+      'jump_b_to_a': this.state.moss_info[allKeys[key]][run]['similarity_jump2'] != 'N/A' ?
+      `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}%` :
       `${this.state.moss_info[allKeys[key]][run]['similarity_jump2']}`,
-    
+
     });
       }
     }
 
-    // Sort the rows in descending order of runid.
-    dataObject.rows.sort((a, b) => parseFloat(b['runid']) - parseFloat(a['runid']));
+    /* Sort the rows in descending order of runid. If the runId is the same,
+    then sort the rows in descending order of similarity jump from Repo A to B. */
+    dataObject.rows.sort((a, b) => {
+      if(b['runid'] !== a['runid'])
+        return parseFloat(b['runid']) - parseFloat(a['runid']);
+        // slice() is used to remove the % character from the end of the string
+      return b['jump_a_to_b'].slice(0,-1) - a['jump_a_to_b'].slice(0,-1);
+    });
   this.setState({moss_info: dataObject});
   }
 
@@ -134,11 +156,24 @@ class StatsView extends Component {
           <Heading
             title={"Statistics"}
             value={"In the table below we are comparing each repo with every other repo and calculating the similarity percentage from Repo A to B and Repo B to A. We are also calculating the similarity percentage jump from the last run to current run. You will notice that the first run has similarity percentage jump as N/A since we do not have a previous run to compare with."}
-            isBack={true}
+            isBack={false}
             onBackPress={this.props.onBackPress}
           />
 
           </div>
+
+          <div className="row">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                this.downloadReport(this.props.check_id);
+              }}
+            >
+              Download Report
+            </button>
+          </div>
+
         <MDBDataTable
       scrollX
       responsive

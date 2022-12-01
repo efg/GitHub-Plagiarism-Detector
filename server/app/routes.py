@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, send_from_directory
 from app import get_app
 from app.utils.response import make_response
 from app.controllers.courses_controller import CourseController
@@ -171,6 +171,50 @@ def delete_check():
         return make_response('Server Error'), 500
 
     return make_response('Success', list_checks), 200
+
+
+# Enable a disabled check
+@app.route('/check/enable', methods=['get'])
+def enable_check():
+    print(request.args)
+    try:
+        ChecksController.enable_check(request.args)
+    except (ValueError, KeyError) as e:
+        print(e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', True), 200
+
+# Disable a check
+@app.route('/check/disable', methods=['get'])
+def disable_check():
+    print(request.args)
+    try:
+        ChecksController.disable_check(request.args)
+    except (ValueError, KeyError) as e:
+        print(e)
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', True), 200
+
+# Get status of the Check
+@app.route('/check/status', methods=['get'])
+def status_check():
+    print(request.args)
+    try:
+        status = ChecksController.get_status(request.args)
+    except (ValueError, KeyError) as e:
+        return make_response(e.args[0]), 400
+    except Exception as e:
+        return make_response('Server Error'), 500
+
+    return make_response('Success', status), 200
+
+
 # ----------------------Reports------------------------
 # Get reports for a check id
 
@@ -233,3 +277,16 @@ def fetch_all_report_infos():
         return make_response('Server Error'), 500
 
     return make_response('suceess', MOSS_info), 200
+
+@app.route('/check/download', methods=['get'])
+def download_report():
+    file_name = ""
+    file_path = ""
+    try:
+        file_path, file_name = ChecksController.download_check_details(request.args)
+    except Exception as e:
+        print(e)
+        return make_response('Server Error'), 500
+
+    response = send_from_directory(directory=file_path, path=file_name, as_attachment=True)
+    return response

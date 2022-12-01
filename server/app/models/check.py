@@ -77,6 +77,11 @@ class Check(db.Model):
         directories = []
         check_dir_path = self.get_check_dir_path()
         # Make a new directory for current check
+        # os.mkdir(check_dir_path)
+
+        if(os.path.exists(check_dir_path)):
+            self.remove_submissions()
+        
         os.mkdir(check_dir_path)
 
         # Clone all github repositories and append the clone directory in 'directories' list
