@@ -7,11 +7,12 @@ from app import scheduler
 
 class StartUpService:
 
+    # This method schedules all the active jobs to the scheduler during startup.
+    # It loops over all the checks, and only schedules jobs whose end_date is after the 
+    # current date.
     @staticmethod
     def schedule_jobs():
         check_entries = Check.query.filter_by(is_active=True, visibility="yes")
-        # should we configure this in .env?
-        offset = 5
         for entry in check_entries:
             start_date = entry.start_date
             end_date = entry.end_date

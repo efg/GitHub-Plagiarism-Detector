@@ -44,6 +44,7 @@ class SubmissionController:
             else:
                 raise ValueError("\n>>>Invalid FileName!!!\n")
 
+    # This method takes the parameters from the request and returns a list of submissions.
     @staticmethod
     def list_submissions(parameters):
 
