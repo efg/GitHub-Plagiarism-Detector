@@ -289,4 +289,4 @@ def download_report():
         return make_response('Server Error'), 500
 
     response = send_from_directory(directory=file_path, path=file_name, as_attachment=True)
-    return response
+    return make_response('suceess', response), 200

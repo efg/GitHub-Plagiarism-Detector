@@ -81,6 +81,8 @@ class StatsView extends Component {
     {label: 'Similarity Jump Repo A to B', field: 'jump_a_to_b', sort: 'asc', width: 100},
     {label: 'Similarity Jump Repo B to A', field: 'jump_b_to_a', sort: 'asc', width: 100}],
     rows: []};
+
+    // Retrive moss report information for each job and add it to the data object
     let allKeys = Object.keys(this.state.moss_info);
     for (const key in allKeys) {
       for (const run in this.state.moss_info[allKeys[key]]) {
