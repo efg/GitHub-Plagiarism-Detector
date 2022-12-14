@@ -43,6 +43,7 @@ class ListView extends Component {
     }
   }
 
+  // Option to pause or disable the scheduled job
   async disableCheck(check_id) {
     await axios
       .get("/check/disable?check_id=" + check_id)

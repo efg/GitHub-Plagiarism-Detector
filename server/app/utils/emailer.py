@@ -83,7 +83,7 @@ def email_jump_info(jumps: list=None, check_id: int=None)->None:
                                     </tr>
                                     <tr>
                                         <td>Similarity Jump Repo A to B</td>
-                                        <td>Difference between the similarity percentage of Team A with Team B from current run to previous run</td>
+                                        <td>Change from the similarity of Team A's code with Team B's code in the previous run (positive number means the code is more similar this time).</td>
                                     </tr>
                                     <tr>
                                         <td>Shared Code Repo B to A</td>
@@ -91,7 +91,7 @@ def email_jump_info(jumps: list=None, check_id: int=None)->None:
                                     </tr>
                                     <tr>
                                         <td>Similarity Jump Repo B to A</td>
-                                        <td>Difference between the similarity percentage of Team B with Team A from current run to previous run</td>
+                                        <td>Change from the similarity of Team B's code with Team A's code in the previous run (positive number means the code is more similar this time).</td>
                                     </tr>
                                 </table>
                                 

@@ -91,6 +91,7 @@ class SimilaritiesController:
         # print(MOSS_info)
         return MOSS_info
 
+    # Scrapes and returns all information from the MOSS report for a given check_id
     @staticmethod
     def fetch_all_report_info(parameters):
         """returns all info scraped from the MOSS report for given check_id """
